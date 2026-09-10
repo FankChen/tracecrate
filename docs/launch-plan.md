@@ -2,13 +2,13 @@
 
 [Home](../README.md) · [Publication gates](release.md) · [Roadmap issue seeds](roadmap.md)
 
-**Planning document, not a record of distribution already performed.** Hosted demo pending publication. All launch copy below is draft; there is no published clip/release link yet.
+**Planning document, not a record of distribution already performed.** [Public repository](https://github.com/FankChen/tracecrate) · [Hosted demo](https://fankchen.github.io/tracecrate/) · [First successful CI](https://github.com/FankChen/tracecrate/actions/runs/34461509021). The full CI job passed, including 36 browser tests; the hosted page and its JS/CSS assets returned HTTP 200. Post-deployment interactive smoke and screenshot verification remain pending; the first Pages run was still wrapping up at this snapshot. All launch copy below is draft: no community post, published video, or release is claimed. See [verification](verification.md).
 
 ## Phase 0 — Earn a useful first impression
 
 Ship one useful flagship workflow: **open a synthetic run → inspect a tool call → understand a recorded difference → review a structure-only report**. Keep that experience coherent before broadening ingestion claims.
 
-- Complete the release/security checklist. Browser E2E is currently unverified because an enterprise firewall blocked browser download; wait for actual CI results before claiming browser validation.
+- Complete the remaining release/security checklist. CI browser E2E has passed on the production preview server; record the separate post-deployment smoke result before claiming live-site interactive validation. Local browser downloads remain blocked.
 - Ask a small number of willing developers who already inspect agent traces to try the synthetic walkthrough. Do not request their private histories. Ask: “Where did the sequence become unclear?” and “Which unsupported shape should a synthetic fixture model?”
 - Resolve confusing states and document limitations. Use voluntarily supplied feedback, not added in-app analytics, as evidence of usefulness.
 
@@ -26,7 +26,7 @@ Record the running app with synthetic data only; close unrelated windows/notific
 | 18–23s | Compare the synthetic pair | “Descriptive differences. Synthetic data.” |
 | 23–30s | Structure-only preview and export | “Review what you share. Metrics can still be sensitive.” |
 
-Add captions and an accessible text walkthrough. Use the original SVG as an explicitly labeled illustration, not evidence of tested rendering. Publish the clip/demo only after review; add their actual links afterward.
+Add captions and an accessible text walkthrough. Use the original SVG as an explicitly labeled illustration, not evidence of tested rendering. The hosted demo is available above; publish the clip only after review and add its actual link afterward. No clip or verified screenshot artifact is claimed yet.
 
 ## Phase 2 — Relevant, legitimate posts
 
@@ -50,7 +50,7 @@ I'm sharing TraceCrate, an original client-side workbench for inspecting recorde
 
 The useful loop is small: inspect a timeline, review heuristic findings, compare recorded metrics, and export a structure-only report. Comparison is descriptive, not a controlled benchmark. Pattern redaction is optional and may miss secrets; even structure-only timing and metrics can be sensitive.
 
-Hosted demo pending publication; [local quickstart](../README.md) and [format limits](formats.md) are available. A 30-second interaction clip is planned, not published. Browser E2E is pending after a firewall-blocked browser download; no passing CI claim yet. Which part of reading an agent run would you want a synthetic example to explain better?
+[Source](https://github.com/FankChen/tracecrate) · [Try the hosted demo](https://fankchen.github.io/tracecrate/) · [Local quickstart](../README.md) · [Format limits](formats.md). Local checks pass with 107 unit tests; the [first successful CI run](https://github.com/FankChen/tracecrate/actions/runs/34461509021) passed the full job, including 36 browser tests. The hosted page and assets returned HTTP 200; live-site interactive smoke and screenshot verification are still pending. A 30-second interaction clip is planned, not published, and no release exists yet. Which part of reading an agent run would you want a synthetic example to explain better?
 
 *Before posting: replace status statements only with verified results and add actual links; disclose your own contributor role accurately. Do not publish this draft verbatim as if the clip exists.*
 
@@ -62,6 +62,6 @@ Hosted demo pending publication; [local quickstart](../README.md) and [format li
 
 核心流程很小：查看时间线、检查启发式提示、对比已记录指标，再导出仅结构报告。对比只是描述性统计，不是受控实验；模式脱敏可能漏掉秘密，仅结构导出的时间与指标也可能敏感。
 
-托管演示待发布，可先看[本地启动说明](../README.zh-CN.md)与[格式限制](formats.md)。30 秒操作视频仍在计划中，尚未发布。企业防火墙阻止了浏览器下载，浏览器 E2E 和新 CI 的验证还在等待，当前不宣称通过。你最希望用一个合成样例解释运行记录中的哪个问题？
+[GitHub 源码](https://github.com/FankChen/tracecrate) · [在线演示](https://fankchen.github.io/tracecrate/) · [本地启动说明](../README.zh-CN.md) · [格式限制](formats.md)。本地检查通过，包括 107 项单元测试；[首次成功 CI](https://github.com/FankChen/tracecrate/actions/runs/34461509021) 完整通过，包括 36 项浏览器测试。线上页面及资源已确认返回 HTTP 200，线上交互 smoke 与截图验证仍待完成。30 秒操作视频尚未发布，也尚无正式 release。你最希望用一个合成样例解释运行记录中的哪个问题？
 
 *发布前核实状态、补充真实链接，并如实说明自己的贡献者身份；不要把计划中的视频或验证写成已完成。*

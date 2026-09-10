@@ -52,4 +52,6 @@ Web Workers are required for UI imports; no synchronous fallback is provided. A 
 
 Core Vitest tests reside alongside core modules. [Playwright configuration](../playwright.config.ts) targets desktop Chromium and Pixel 7 emulation using the production preview server. [CI](../.github/workflows/ci.yml) runs checks and E2E; [Pages](../.github/workflows/pages.yml) independently gates a manual default-branch deployment on those checks and publishes the resulting build directory.
 
-Local browser download is blocked by an enterprise firewall. Browser E2E runs in GitHub Actions; consult the current run rather than inferring a pass from source review. See [verification](verification.md) and [release gates](release.md).
+The [first successful CI run](https://github.com/FankChen/tracecrate/actions/runs/34461509021), at commit `07a87aba1e4f7778057eafc3dca6159118b0fe43`, passed the full job including 36 desktop/mobile browser tests. Local checks passed with 107 unit tests and 96.58% core/adapters line coverage, not UI coverage. Local browser downloads remain blocked by an enterprise firewall.
+
+The [hosted demo](https://fankchen.github.io/tracecrate/) and its JS/CSS assets returned HTTP 200. This verifies static availability, not live interactive behavior: the first Pages run was still wrapping up, and post-deployment smoke/screenshot verification remains pending. See [verification](verification.md) for the recorded build and evidence, and [release gates](release.md) for remaining checks. No release has been published.

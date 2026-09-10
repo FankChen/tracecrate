@@ -21,7 +21,7 @@ npm run test:e2e
 
 `check` runs Oxlint, Vitest, then TypeScript + Vite build. `test:coverage` produces a Vitest coverage report; no coverage percentage is promised. Playwright is configured for desktop Chromium and Pixel 7 emulation, using the production preview server. Emulation is not testing on physical Android hardware; Firefox/WebKit coverage is not claimed. Browser installation may need network access and system-package privileges; use an approved machine/CI rather than weakening firewall or TLS protections.
 
-**Current verification boundary:** the enterprise firewall blocked the browser download in the development environment. Browser E2E has not run there; GitHub CI has not yet executed these new workflows. A configured check is not a passing check. Report exactly which commands ran, their results, and anything blocked; do not infer passes from existing build output. This documentation task does not certify current lint/unit/build status.
+**Verification boundary:** local browser downloads are blocked by the development network, so Chromium desktop/mobile tests run in GitHub Actions. See the [verification record](docs/verification.md) for actual passing runs and limits. For each contribution report exactly which commands ran and anything blocked; do not infer passes from configuration or existing build output.
 
 ## Keep changes reviewable
 

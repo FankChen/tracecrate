@@ -57,6 +57,8 @@ jobs:
   deploy:
     name: Deploy reviewed site
     needs: build
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -70,3 +72,32 @@ jobs:
       - name: Deploy Pages artifact
         id: deployment
         uses: actions/deploy-pages@v4
+
+  verify:
+    name: Verify actual public site
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Smoke-test public deployment with synthetic data
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: node scripts/verify-live.mjs "$PAGE_URL"
+      - name: Retain actual synthetic-demo screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-site-evidence
+          path: live-evidence/
+          retention-days: 7

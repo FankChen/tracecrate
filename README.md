@@ -2,6 +2,8 @@
 
 **A privacy-first, client-side AI trace workbench. Inspect the sequence, question the patterns, share deliberately.**
 
+[![CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)
+
 [简体中文](README.zh-CN.md) · [Format guide](docs/formats.md) · [Privacy](docs/privacy.md) · [Contributing](CONTRIBUTING.md)
 
 ![Original TraceCrate product illustration: a local trace timeline beside findings and a structure-only export. Not a screenshot.](public/social-card.svg)
@@ -10,11 +12,11 @@
 
 TraceCrate turns files you choose into a searchable timeline, recorded metrics, heuristic diagnostics, and side-by-side comparisons. No backend, no telemetry, no accounts, no API keys. It reads traces; it does not run agents or execute recorded commands.
 
-**Hosted demo pending publication.** Run locally below; no live demo or published release is claimed.
+**[Open the hosted demo](https://fankchen.github.io/tracecrate/)** · [Source on GitHub](https://github.com/FankChen/tracecrate). Explore synthetic runs without installing anything, or run locally below. No release has been published.
 
 ## Try the story in 30 seconds
 
-Requires **Node.js ≥22.12 (24 recommended)** and npm:
+Open the [hosted demo](https://fankchen.github.io/tracecrate/) and follow the walkthrough below. Local use requires **Node.js ≥22.12 (24 recommended)** and npm:
 
 ```sh
 git clone https://github.com/FankChen/tracecrate.git
@@ -23,7 +25,7 @@ npm ci
 npm run dev
 ```
 
-Open the local address printed by Vite. Installation time is separate from the 30-second walkthrough:
+For local use, open the address printed by Vite. Installation time is separate from the 30-second walkthrough:
 
 1. **0–10s:** The two synthetic pagination runs load automatically. Open a tool event in **Timeline**; search or filter by event kind.
 2. **10–20s:** Open **Insights**, then **Compare** to inspect recorded differences. “Baseline” and “optimized” are manufactured demo labels, not measured improvements.
@@ -63,7 +65,9 @@ The app has no trace-upload or telemetry path. That does **not** make every envi
 
 `npm run check` runs lint, unit tests, and the production build. `npm run test:e2e` invokes Playwright; browser binaries must be installed separately. See [contribution checks](CONTRIBUTING.md).
 
-**Validation:** local lint, 107 unit tests and the production build pass; core/adapters line coverage is 96.58% (not UI coverage). Browser tests run on GitHub because local browser downloads are blocked. Check the [current CI run](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml) and [verification record](docs/verification.md) for the browser result.
+**Validation:** local lint, 107 unit tests and the production build pass; core/adapters line coverage is **96.58% (not UI coverage)**. The [first successful CI run](https://github.com/FankChen/tracecrate/actions/runs/34461509021) passed the full job, including **36 desktop/mobile browser tests**, at commit `07a87aba1e4f7778057eafc3dca6159118b0fe43`. Local browser downloads remain blocked.
+
+**Hosting:** the actual Pages URL and its JS/CSS assets returned HTTP 200. At this verification snapshot, the first Pages run was still wrapping up; post-deployment interactive smoke and screenshot verification remain pending. CI browser tests use a production preview server, not the hosted site. See the [verification record](docs/verification.md) for evidence and remaining checks.
 
 - [CI workflow](.github/workflows/ci.yml) — Node 24, checks, Chromium E2E.
 - [Manual Pages workflow](.github/workflows/pages.yml) — default branch only; enable Pages → GitHub Actions, then dispatch manually. [Publication checklist](docs/release.md).

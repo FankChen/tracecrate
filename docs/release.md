@@ -1,9 +1,10 @@
-**Repository:** [FankChen/tracecrate](https://github.com/FankChen/tracecrate). See the [verification record](verification.md) for actual checks and the README for live deployment status. The checklist below also applies to future releases; a package version alone is not a published release.
 # Publication and release checklist
 
 [Home](../README.md) · [Launch plan](launch-plan.md)
 
-**Current state:** hosted demo pending publication; no release URL or repository owner is assumed. The package version is not a published release. Browser download was blocked by the current enterprise firewall; browser E2E has not run here and the new GitHub workflows have not yet executed. Resolve and record validation before announcing a release.
+**Repository:** [FankChen/tracecrate](https://github.com/FankChen/tracecrate). See the [verification record](verification.md) for actual checks and the README for live deployment status. This checklist also applies to future releases; a package version alone is not a published release.
+
+**Current snapshot · 2026-09-10:** the repository is public; the [first successful CI run](https://github.com/FankChen/tracecrate/actions/runs/34461509021) passed the full job with 36 browser tests at commit `07a87aba1e4f7778057eafc3dca6159118b0fe43`. Local checks passed with 107 unit tests. The [hosted demo](https://fankchen.github.io/tracecrate/) and its JS/CSS assets returned HTTP 200. The [first Pages run](https://github.com/FankChen/tracecrate/actions/runs/34461509842) was still wrapping up; its final success is not recorded here. Post-deployment interactive smoke and screenshot verification remain pending. **No release exists; the changelog stays Unreleased.** Unchecked items below are review gates, not a claim that completed CI or hosting checks never ran.
 
 ## 1. Review before making anything public
 
@@ -18,13 +19,11 @@
 
 No installation, Git operation, repository creation, or publication is performed by this checklist itself.
 
-## 2. Authenticate safely and choose the owner explicitly
+## 2. Confirm repository access and settings
 
-If using GitHub CLI, authenticate with **`gh auth login --web`** and complete authorization in the browser. Do not paste tokens into shell commands, chat, issues, or this repository. Never use an invented owner inferred from a local path or account label. Verify the selected GitHub account and its authorization to publish under the intended organization.
+Use the existing [FankChen/tracecrate](https://github.com/FankChen/tracecrate) repository; do not create a duplicate. Confirm the selected account is authorized for this target. If GitHub CLI authentication is needed, use `gh auth login --web` and complete authorization in the browser; never paste tokens into commands, chat, issues, or the repository.
 
-**`OWNER` below is a placeholder the user must replace with their chosen GitHub user or organization. Do not run it literally.** Only after the review above passes and publication is explicitly approved, use `gh repo create OWNER/tracecrate --public` to create an empty public repository. This publishes repository visibility; it does not upload local source. If a repository already exists, skip creation and verify it is the intended target.
-
-Review and publish only the intended source/history through your normal Git workflow. This guide deliberately does not automate broad staging, initialization, remote replacement, or pushing from an unknown working tree. Set/confirm the repository's actual default branch; the workflows do not assume it is named main.
+Review and publish only intended source/history through the normal Git workflow. Do not broadly stage a parent workspace or replace remotes blindly. Confirm the actual default branch; the workflows do not assume it is named main.
 
 Enable private vulnerability reporting, review Actions permissions, require CI in branch protection/rulesets as appropriate, and review Dependabot updates. No API key or manually pasted deployment secret is required by TraceCrate's workflows.
 
@@ -44,10 +43,10 @@ Its repository permission is `contents: read`; checkout does not persist credent
 1. In repository **Settings → Pages → Build and deployment**, select **GitHub Actions**. This is a user prerequisite; the workflow does not automatically enable Pages.
 2. Review the **github-pages** environment and restrict deployment branches to the actual default branch; add approval protection if desired.
 3. Ensure the [Pages workflow](../.github/workflows/pages.yml) is present on the default branch. In **Actions → Pages → Run workflow**, select that branch and run manually. Other branch/tag refs are blocked by the job conditions.
-4. The build job runs Node 24 installation, checks, and Chromium E2E before official `configure-pages@v5` and `upload-pages-artifact@v3` upload the tested production build. It has read-only contents/Pages access. Vite's relative base supports a project subpath; it is not a verified live deployment until checked.
+4. The build job runs Node 24 installation, checks, and Chromium E2E before official `configure-pages@v5` and `upload-pages-artifact@v3` upload the tested production build. It has read-only contents/Pages access. Vite's relative base supports a project subpath; each deployment still needs actual URL and interaction checks.
 5. The separate deployment job uses `deploy-pages@v4`. Only this job receives `pages: write` and `id-token: write`, and it does not check out or execute project code. Publication uses GitHub's short-lived workflow credentials/OIDC, not a pasted token.
 6. Open the URL returned by the successful deployment job. Verify assets and workers load at the actual project path, then repeat the synthetic import/export walkthrough and check that no trace-content requests are sent. Record the revision/run and results.
-7. Only after verification, update demo references with the actual URL. Until then keep **hosted demo pending publication**. Do not manufacture a Pages URL from a guessed owner.
+7. Link only the actual verified URL, and distinguish HTTP/asset availability from interactive smoke results. The current demo URL is verified for HTTP availability; do not infer future deployment success or a published release from that result.
 
 The workflow has only `workflow_dispatch`: no push/PR deployment and no release automation. A failed gate means no artifact/deployment. Re-running a known-good reviewed revision still requires the default-branch check and normal gates; do not grant branch bypasses for rollback. A suspected exposure warrants disabling Pages while investigating.
 

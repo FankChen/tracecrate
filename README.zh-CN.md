@@ -2,6 +2,8 @@
 
 **隐私优先、纯客户端的 AI trace 工作台。读懂事件顺序，检查可疑模式，审慎分享。**
 
+[![CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)
+
 [English](README.md) · [格式说明](docs/formats.md) · [隐私边界](docs/privacy.md) · [参与贡献](CONTRIBUTING.md)
 
 ![TraceCrate 原创产品示意图：本地时间线、启发式发现与仅结构导出；不是截图，内容为合成示例。](public/social-card.svg)
@@ -10,11 +12,11 @@
 
 TraceCrate 把你主动选择的 trace 文件变成可搜索的时间线、统计、启发式诊断和双会话对比。**无后端、无遥测、无账号、无需 API key**；不会运行 agent，也不会执行日志里的命令。
 
-**托管演示待发布。** 当前不宣称已有线上演示或正式 release。
+**[打开在线演示](https://fankchen.github.io/tracecrate/)** · [GitHub 源码](https://github.com/FankChen/tracecrate)。无需安装即可探索合成示例，也可按下方说明本地运行。尚未发布正式 release。
 
 ## 30 秒体验
 
-需要 **Node.js ≥22.12，推荐 24**，以及 npm：
+打开[在线演示](https://fankchen.github.io/tracecrate/)即可按下面步骤体验。本地运行需要 **Node.js ≥22.12，推荐 24**，以及 npm：
 
 ```sh
 git clone https://github.com/FankChen/tracecrate.git
@@ -23,7 +25,7 @@ npm ci
 npm run dev
 ```
 
-打开 Vite 输出的本地地址。依赖安装时间不计入下面的 30 秒操作：
+本地运行时，打开 Vite 输出的地址。依赖安装时间不计入下面的 30 秒操作：
 
 1. **0–10 秒：** 自动载入两份合成分页修复示例。在 **Timeline** 打开工具事件，搜索或按事件类型筛选。
 2. **10–20 秒：** 查看 **Insights** 和 **Compare**。示例中的 baseline / optimized 只是人工构造的标签，不是性能提升证据。
@@ -63,7 +65,9 @@ npm run dev
 
 `npm run check` 包括 lint、单元测试和构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。
 
-**验证状态：** 本地 lint、107 项单元测试和生产构建通过；核心解析/分析/导出代码行覆盖率 96.58%（不含 UI）。本地浏览器下载受限，因此浏览器测试在 GitHub 执行；实际结果以[当前 CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)及[验收记录](docs/verification.md)为准。
+**验证状态：** 本地 lint、107 项单元测试和生产构建通过；核心及适配器代码行覆盖率 **96.58%（不含 UI）**。[首次成功 CI](https://github.com/FankChen/tracecrate/actions/runs/34461509021) 在提交 `07a87aba1e4f7778057eafc3dca6159118b0fe43` 上完整通过，包括 **36 项桌面/移动端浏览器测试**。本地浏览器下载仍受限。
+
+**托管状态：** 实际 Pages 地址及 JS/CSS 资源已确认返回 HTTP 200。本次记录时首次 Pages 运行仍在收尾；部署后线上交互 smoke 与截图验证尚未完成。CI 浏览器测试针对生产预览服务器，不等于线上站点交互验证。证据与待验项目见[验收记录](docs/verification.md)。
 
 [CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署：用户先在 Pages 选择 GitHub Actions，再手动运行。[发布清单](docs/release.md) · [路线图提案](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
 

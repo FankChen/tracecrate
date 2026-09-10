@@ -2,7 +2,15 @@
 
 [Home](../README.md) · [Contributing](../CONTRIBUTING.md)
 
-These are ready-to-discuss issue ideas, not existing GitHub issues, delivery commitments, or implemented capabilities. No issue numbers/URLs are invented. Current behavior is documented in [formats](formats.md) and [architecture](architecture.md).
+These are proposals, not delivery commitments or implemented capabilities. Current behavior is documented in [formats](formats.md) and [architecture](architecture.md).
+
+## Open contribution tasks
+
+- [#4 · Versioned synthetic Claude fixture](https://github.com/FankChen/tracecrate/issues/4) — help wanted; agree on one source shape first.
+- [#5 · Keyboard-only walkthrough](https://github.com/FankChen/tracecrate/issues/5) — good first issue; document an actual browser run, not assumed behavior.
+- [#6 · Export metadata minimization](https://github.com/FankChen/tracecrate/issues/6) — design discussion before implementation.
+
+## Further proposals
 
 | Proposed issue | User question | Suggested acceptance evidence |
 | --- | --- | --- |

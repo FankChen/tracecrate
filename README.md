@@ -3,16 +3,18 @@
 **A privacy-first, client-side AI trace workbench. Inspect the sequence, question the patterns, share deliberately.**
 
 [![CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)
+[![Pages](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml)
+[![Release v0.1.0](https://img.shields.io/badge/release-v0.1.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)
 
 [简体中文](README.zh-CN.md) · [Format guide](docs/formats.md) · [Privacy](docs/privacy.md) · [Contributing](CONTRIBUTING.md)
 
-![Original TraceCrate product illustration: a local trace timeline beside findings and a structure-only export. Not a screenshot.](public/social-card.svg)
+![Synthetic demo screenshot: TraceCrate's recorded metrics, timeline, and selected tool event on the live site.](docs/screenshots/tracecrate-desktop.png)
 
-*Original product illustration, not a screenshot. All illustrated events and values are synthetic.*
+*Actual live-site screenshot, visually reviewed; 1440 × 2026 full page. All events and values are synthetic demo data, not benchmark results.*
 
 TraceCrate turns files you choose into a searchable timeline, recorded metrics, heuristic diagnostics, and side-by-side comparisons. No backend, no telemetry, no accounts, no API keys. It reads traces; it does not run agents or execute recorded commands.
 
-**[Open the hosted demo](https://fankchen.github.io/tracecrate/)** · [Source on GitHub](https://github.com/FankChen/tracecrate). Explore synthetic runs without installing anything, or run locally below. No release has been published.
+**[Open the live demo](https://fankchen.github.io/tracecrate/)** · **[v0.1.0 release](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)** · **[Contribute](CONTRIBUTING.md)** · [Source on GitHub](https://github.com/FankChen/tracecrate). Explore synthetic runs without installing anything, or run locally below.
 
 ## Try the story in 30 seconds
 
@@ -65,12 +67,12 @@ The app has no trace-upload or telemetry path. That does **not** make every envi
 
 `npm run check` runs lint, unit tests, and the production build. `npm run test:e2e` invokes Playwright; browser binaries must be installed separately. See [contribution checks](CONTRIBUTING.md).
 
-**Validation:** local lint, 107 unit tests and the production build pass; core/adapters line coverage is **96.58% (not UI coverage)**. The [first successful CI run](https://github.com/FankChen/tracecrate/actions/runs/34461509021) passed the full job, including **36 desktop/mobile browser tests**, at commit `07a87aba1e4f7778057eafc3dca6159118b0fe43`. Local browser downloads remain blocked.
+**Verified release · 2026-09-10:** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`. [CI run 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) passed lint, TypeScript/build, **107 unit tests and 36 desktop Chromium / Pixel 7 emulation browser tests**. Recorded core/adapters line coverage is **96.58% (not UI coverage)**.
 
-**Hosting:** the actual Pages URL and its JS/CSS assets returned HTTP 200. At this verification snapshot, the first Pages run was still wrapping up; post-deployment interactive smoke and screenshot verification remain pending. CI browser tests use a production preview server, not the hosted site. See the [verification record](docs/verification.md) for evidence and remaining checks.
+**Live verification:** [Pages run 34462098830](https://github.com/FankChen/tracecrate/actions/runs/34462098830) succeeded in build, deployment, and Playwright smoke against the actual public site: subpath assets, cold offline first import using a synthetic Claude fixture after page load, default structure-only HTML download, and no console/page errors. The screenshot above comes from its downloaded evidence artifact. See the [verification record](docs/verification.md). Local browser downloads remain blocked; Firefox/WebKit and screen-reader certification are not claimed. Launch posts and the interaction video are **not published**.
 
 - [CI workflow](.github/workflows/ci.yml) — Node 24, checks, Chromium E2E.
 - [Manual Pages workflow](.github/workflows/pages.yml) — default branch only; enable Pages → GitHub Actions, then dispatch manually. [Publication checklist](docs/release.md).
-- [Roadmap issue seeds](docs/roadmap.md) · [Organic launch plan and draft copy](docs/launch-plan.md) · [Changelog](CHANGELOG.md).
+- [Open contribution tasks and roadmap](docs/roadmap.md) · [Organic launch plan and draft copy](docs/launch-plan.md) · [Changelog](CHANGELOG.md).
 
 Original TraceCrate project; not affiliated with or endorsed by Anthropic, OpenAI, or OpenTelemetry. [MIT license](LICENSE), copyright 2026 TraceCrate contributors.

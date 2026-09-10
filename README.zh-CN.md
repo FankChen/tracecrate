@@ -3,16 +3,18 @@
 **隐私优先、纯客户端的 AI trace 工作台。读懂事件顺序，检查可疑模式，审慎分享。**
 
 [![CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)
+[![Pages](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml)
+[![Release v0.1.0](https://img.shields.io/badge/release-v0.1.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)
 
 [English](README.md) · [格式说明](docs/formats.md) · [隐私边界](docs/privacy.md) · [参与贡献](CONTRIBUTING.md)
 
-![TraceCrate 原创产品示意图：本地时间线、启发式发现与仅结构导出；不是截图，内容为合成示例。](public/social-card.svg)
+![TraceCrate 合成示例实际截图：线上站点的已记录指标、时间线和选中的工具事件。](docs/screenshots/tracecrate-desktop.png)
 
-*原创产品示意图，不是实际截图；事件与数值均为合成内容。*
+*线上站点实际截图，已目视检查；1440 × 2026 整页。事件与数值均为合成示例，不是性能评测结果。*
 
 TraceCrate 把你主动选择的 trace 文件变成可搜索的时间线、统计、启发式诊断和双会话对比。**无后端、无遥测、无账号、无需 API key**；不会运行 agent，也不会执行日志里的命令。
 
-**[打开在线演示](https://fankchen.github.io/tracecrate/)** · [GitHub 源码](https://github.com/FankChen/tracecrate)。无需安装即可探索合成示例，也可按下方说明本地运行。尚未发布正式 release。
+**[打开在线演示](https://fankchen.github.io/tracecrate/)** · **[v0.1.0 正式发布](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)** · **[参与贡献](CONTRIBUTING.md)** · [GitHub 源码](https://github.com/FankChen/tracecrate)。无需安装即可探索合成示例，也可按下方说明本地运行。
 
 ## 30 秒体验
 
@@ -65,10 +67,10 @@ npm run dev
 
 `npm run check` 包括 lint、单元测试和构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。
 
-**验证状态：** 本地 lint、107 项单元测试和生产构建通过；核心及适配器代码行覆盖率 **96.58%（不含 UI）**。[首次成功 CI](https://github.com/FankChen/tracecrate/actions/runs/34461509021) 在提交 `07a87aba1e4f7778057eafc3dca6159118b0fe43` 上完整通过，包括 **36 项桌面/移动端浏览器测试**。本地浏览器下载仍受限。
+**已验证发布 · 2026-09-10：** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) 已在测试提交 `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715` 上创建。[CI 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) 通过 lint、TypeScript/构建、**107 项单元测试及 36 项桌面 Chromium / Pixel 7 模拟浏览器测试**。已记录核心及适配器代码行覆盖率 **96.58%（不含 UI）**。
 
-**托管状态：** 实际 Pages 地址及 JS/CSS 资源已确认返回 HTTP 200。本次记录时首次 Pages 运行仍在收尾；部署后线上交互 smoke 与截图验证尚未完成。CI 浏览器测试针对生产预览服务器，不等于线上站点交互验证。证据与待验项目见[验收记录](docs/verification.md)。
+**线上验证：** [Pages 34462098830](https://github.com/FankChen/tracecrate/actions/runs/34462098830) 的构建、部署及实际公网 Playwright smoke 均成功：项目子路径资源、页面加载后切换离线且此前未导入时首次导入合成 Claude fixture、默认仅结构 HTML 下载，以及无 console/page 错误。上方截图来自该运行已下载的证据产物，详见[验收记录](docs/verification.md)。本地浏览器下载仍受限；不声称通过 Firefox/WebKit 或屏幕阅读器认证。社区发布帖和操作视频仍**未发布**。
 
-[CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署：用户先在 Pages 选择 GitHub Actions，再手动运行。[发布清单](docs/release.md) · [路线图提案](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
+[CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署：用户先在 Pages 选择 GitHub Actions，再手动运行。[发布清单](docs/release.md) · [开放贡献任务与路线图](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
 
 TraceCrate 是原创项目，与 Anthropic、OpenAI、OpenTelemetry 无隶属或背书关系。[MIT 许可证](LICENSE)，copyright 2026 TraceCrate contributors。

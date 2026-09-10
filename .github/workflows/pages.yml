@@ -22,11 +22,11 @@ jobs:
       pages: read
     steps:
       - name: Check out selected default-branch revision
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
@@ -39,9 +39,9 @@ jobs:
       - name: Browser tests against production preview
         run: npm run test:e2e
       - name: Read Pages configuration (enable Pages in settings first)
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Upload tested production site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -60,4 +60,4 @@ jobs:
     steps:
       - name: Deploy Pages artifact
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

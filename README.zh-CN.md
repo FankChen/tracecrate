@@ -14,9 +14,11 @@ TraceCrate 把你主动选择的 trace 文件变成可搜索的时间线、统�
 
 ## 30 秒体验
 
-需要 **Node.js ≥22.12，推荐 24**，以及 npm。在项目目录执行：
+需要 **Node.js ≥22.12，推荐 24**，以及 npm：
 
 ```sh
+git clone https://github.com/FankChen/tracecrate.git
+cd tracecrate
 npm ci
 npm run dev
 ```
@@ -61,7 +63,7 @@ npm run dev
 
 `npm run check` 包括 lint、单元测试和构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。
 
-**验证限制：** 当前企业防火墙阻止了 Playwright 浏览器下载，本环境尚未执行浏览器 E2E；新增 CI 将进行验证，但尚未在 GitHub 运行。本次文档改动不代表 lint/单元测试/构建已通过，因此不展示通过徽章。
+**验证状态：** 本地 lint、107 项单元测试和生产构建通过；核心解析/分析/导出代码行覆盖率 96.58%（不含 UI）。本地浏览器下载受限，因此浏览器测试在 GitHub 执行；实际结果以[当前 CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)及[验收记录](docs/verification.md)为准。
 
 [CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署：用户先在 Pages 选择 GitHub Actions，再手动运行。[发布清单](docs/release.md) · [路线图提案](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
 

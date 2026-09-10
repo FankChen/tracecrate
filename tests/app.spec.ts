@@ -231,7 +231,9 @@ test('invalid file import shows an error while retaining the prior active import
     await expect(importStatus(page)).toBeVisible();
     await expect(upload(page)).toBeEnabled();
     await expect(upload(page)).toHaveValue('');
-    await expect(activeSession(page)).toHaveText(before);
+    // Match the innerText snapshot: block-level session labels insert a rendered
+    // newline that textContent (the default for toHaveText) does not contain.
+    await expect(activeSession(page)).toHaveText(before, { useInnerText: true });
     await expect(sessions(page).getByRole('button')).toHaveCount(3);
     await expect(page.getByRole('main').getByRole('heading', { name: 'claude.jsonl', exact: true })).toBeVisible();
     expect(await rows(page).evaluateAll((elements) => elements.map((element) => element.getAttribute('data-event-id')))).toEqual(beforeIds);

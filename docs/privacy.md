@@ -6,7 +6,7 @@
 
 The current application has no backend, trace-upload API, analytics/telemetry integration, account system, or API-key requirement. File selection/drop is explicit. It does not crawl Claude/Codex storage, read arbitrary directories, call models, execute commands, or follow links inside trace content. Text is rendered as text, not interpreted as HTML/code.
 
-The import hook sends selected `File` objects to a module Web Worker. Reading and parsing happen there; normalized traces return to React state. Imports are sequential and sessions are memory-only, with no app persistence in localStorage/IndexedDB. **Clear sessions** terminates pending workers and drops session state; reload drops imports and loads fresh synthetic demos. This is not secure memory erasure, protection against OS swap/crash dumps, or deletion of the selected original/downloads.
+The import hook sends selected `File` objects to a Web Worker bundled inline with the app. No separate worker HTTP request is needed on the first import after loading the app. Reading and parsing happen there; normalized traces return to React state. Imports are sequential and sessions are memory-only, with no app persistence in localStorage/IndexedDB. **Clear sessions** terminates pending workers and drops session state; reload drops imports and loads fresh synthetic demos. This is not secure memory erasure, protection against OS swap/crash dumps, or deletion of the selected original/downloads.
 
 ## What “no uploads” does not cover
 

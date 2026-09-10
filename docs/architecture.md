@@ -52,4 +52,4 @@ Web Workers are required for UI imports; no synchronous fallback is provided. A 
 
 Core Vitest tests reside alongside core modules. [Playwright configuration](../playwright.config.ts) targets desktop Chromium and Pixel 7 emulation using the production preview server. [CI](../.github/workflows/ci.yml) runs checks and E2E; [Pages](../.github/workflows/pages.yml) independently gates a manual default-branch deployment on those checks and publishes the resulting build directory.
 
-Current browser download is blocked by an enterprise firewall; browser E2E is unverified here and new GitHub workflows have not run. Documentation records source behavior, not a tested browser compatibility or deployment guarantee. See [release gates](release.md).
+Local browser download is blocked by an enterprise firewall. Browser E2E runs in GitHub Actions; consult the current run rather than inferring a pass from source review. See [verification](verification.md) and [release gates](release.md).

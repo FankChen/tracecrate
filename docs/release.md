@@ -1,3 +1,4 @@
+**Repository:** [FankChen/tracecrate](https://github.com/FankChen/tracecrate). See the [verification record](verification.md) for actual checks and the README for live deployment status. The checklist below also applies to future releases; a package version alone is not a published release.
 # Publication and release checklist
 
 [Home](../README.md) · [Launch plan](launch-plan.md)
@@ -36,7 +37,7 @@ Enable private vulnerability reporting, review Actions permissions, require CI i
 3. `npx playwright install --with-deps chromium`
 4. `npm run test:e2e`
 
-Its repository permission is `contents: read`; checkout does not persist credentials. No `pull_request_target`, repository write token, deploy job, or secret is used. Do not claim CI passed until the actual run passes. Browser traces may contain page data: use only synthetic fixtures and review artifacts before sharing. The workflow does not automatically upload diagnostic artifacts.
+Its repository permission is `contents: read`; checkout does not persist credentials. No `pull_request_target`, repository write token, deploy job, or secret is used. Do not claim CI passed until the actual run passes. Browser traces may contain page data: use only synthetic fixtures and review artifacts before sharing. Diagnostic reports/test results are uploaded with seven-day retention; never substitute private histories for synthetic fixtures.
 
 ## 4. Publish Pages manually
 

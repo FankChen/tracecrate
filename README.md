@@ -14,9 +14,11 @@ TraceCrate turns files you choose into a searchable timeline, recorded metrics, 
 
 ## Try the story in 30 seconds
 
-Requires **Node.js ≥22.12 (24 recommended)** and npm. From the project directory:
+Requires **Node.js ≥22.12 (24 recommended)** and npm:
 
 ```sh
+git clone https://github.com/FankChen/tracecrate.git
+cd tracecrate
 npm ci
 npm run dev
 ```
@@ -61,41 +63,10 @@ The app has no trace-upload or telemetry path. That does **not** make every envi
 
 `npm run check` runs lint, unit tests, and the production build. `npm run test:e2e` invokes Playwright; browser binaries must be installed separately. See [contribution checks](CONTRIBUTING.md).
 
-**Validation caveat:** the current environment's enterprise firewall blocked the Playwright browser download. Browser E2E has not been executed here; the new CI workflow is configured to validate it but has not yet run on GitHub. This documentation change does not certify lint/unit/build results. No passing badges are shown.
+**Validation:** local lint, 107 unit tests and the production build pass; core/adapters line coverage is 96.58% (not UI coverage). Browser tests run on GitHub because local browser downloads are blocked. Check the [current CI run](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml) and [verification record](docs/verification.md) for the browser result.
 
 - [CI workflow](.github/workflows/ci.yml) — Node 24, checks, Chromium E2E.
 - [Manual Pages workflow](.github/workflows/pages.yml) — default branch only; enable Pages → GitHub Actions, then dispatch manually. [Publication checklist](docs/release.md).
 - [Roadmap issue seeds](docs/roadmap.md) · [Organic launch plan and draft copy](docs/launch-plan.md) · [Changelog](CHANGELOG.md).
 
-Original TraceCrate project; not affiliated with or endorsed by Anthropic, OpenAI, or OpenTelemetry. [MIT license](LICENSE), copyright 2026 TraceCrate contributors.# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Original TraceCrate project; not affiliated with or endorsed by Anthropic, OpenAI, or OpenTelemetry. [MIT license](LICENSE), copyright 2026 TraceCrate contributors.

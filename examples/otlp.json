@@ -1,0 +1,35 @@
+{
+  "resourceSpans": [{
+    "resource": {"attributes": [{"key": "service.name", "value": {"stringValue": "synthetic-agent"}}]},
+    "scopeSpans": [{"spans": [
+      {
+        "traceId": "00000000000000000000000000000001",
+        "spanId": "0000000000000001",
+        "name": "synthetic-generation",
+        "startTimeUnixNano": "1767225600000000000",
+        "endTimeUnixNano": "1767225600100000000",
+        "status": {"code": 1},
+        "attributes": [
+          {"key": "gen_ai.request.model", "value": {"stringValue": "synthetic-model"}},
+          {"key": "gen_ai.usage.input_tokens", "value": {"intValue": "12"}},
+          {"key": "gen_ai.usage.output_tokens", "value": {"intValue": "3"}}
+        ]
+      },
+      {
+        "traceId": "00000000000000000000000000000001",
+        "spanId": "0000000000000002",
+        "parentSpanId": "0000000000000001",
+        "name": "synthetic-tool",
+        "startTimeUnixNano": "1767225600010000000",
+        "endTimeUnixNano": "1767225600011000000",
+        "status": {"code": 2, "message": "Synthetic failure"},
+        "attributes": [
+          {"key": "gen_ai.tool.name", "value": {"stringValue": "lookup"}},
+          {"key": "gen_ai.tool.call.id", "value": {"stringValue": "call-1"}},
+          {"key": "gen_ai.tool.call.arguments", "value": {"stringValue": "{\"key\":\"synthetic\"}"}},
+          {"key": "gen_ai.tool.call.result", "value": {"stringValue": "not found"}}
+        ]
+      }
+    ]}]
+  }]
+}

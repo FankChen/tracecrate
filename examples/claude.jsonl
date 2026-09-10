@@ -1,0 +1,5 @@
+{"type":"system","subtype":"init","session_id":"synthetic-claude","model":"synthetic-model","timestamp":"2026-01-01T00:00:00Z"}
+{"type":"user","message":{"id":"u1","content":[{"type":"text","text":"Count the synthetic items."}]}}
+{"type":"assistant","timestamp":"2026-01-01T00:00:01Z","message":{"id":"a1","model":"synthetic-model","usage":{"input_tokens":10,"cache_read_input_tokens":3,"cache_creation_input_tokens":2,"output_tokens":1},"content":[{"type":"tool_use","id":"call1","name":"count_items","input":{"items":[1,2]}}]}}
+{"type":"user","timestamp":"2026-01-01T00:00:02Z","message":{"id":"u2","content":[{"type":"tool_result","tool_use_id":"call1","content":"2","is_error":false}]}}
+{"type":"assistant","message":{"id":"a1","model":"synthetic-model","usage":{"input_tokens":10,"cache_read_input_tokens":3,"cache_creation_input_tokens":2,"output_tokens":4},"content":[{"type":"text","text":"There are two items."}]}}

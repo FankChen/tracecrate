@@ -1,0 +1,27 @@
+name: Feature request
+description: Propose one useful local trace workflow.
+title: '[Feature] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem without real traces, secrets, private code, or raw logs. Proposals are not promises of implementation.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What workflow is difficult today?
+      description: Use a synthetic example or a general description, not an actual history.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Smallest useful change and alternatives
+      description: Include how it preserves local processing and honest privacy/format boundaries.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: How would we verify it?
+      description: Suggest observable acceptance criteria; include public format documentation if relevant. No raw logs or secrets.

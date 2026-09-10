@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">TraceCrate — Your agent ran. Read what happened.</title>
+  <desc id="desc">Original product illustration, not a screenshot. A synthetic local trace timeline leads to heuristic findings and a structure-only report. No backend, telemetry, or API keys. Illustrated timing and events are synthetic.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1">
+      <stop stop-color="#101b30"/><stop offset="1" stop-color="#080d19"/>
+    </linearGradient>
+    <linearGradient id="accent" x2="1" y2="1">
+      <stop stop-color="#98f3d7"/><stop offset="1" stop-color="#5cbaea"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="24" fill="url(#background)"/>
+  <g fill="none" stroke="#22334b" opacity="0.65">
+    <path d="M780 0v630M980 0v630M0 180h1200M0 530h1200"/>
+    <circle cx="1030" cy="75" r="190"/><circle cx="1030" cy="75" r="140"/>
+  </g>
+  <g font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+    <g transform="translate(48 38)" fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-linejoin="round">
+      <path d="M21 0 42 12v24L21 48 0 36V12Z M0 12l21 12 21-12M21 24v24M11 6l21 12"/>
+    </g>
+    <text x="106" y="71" fill="#f0f5ff" font-size="30" font-weight="750">TraceCrate<tspan fill="#98f3d7">.</tspan></text>
+    <rect x="854" y="43" width="296" height="34" rx="17" fill="#19342e"/>
+    <circle cx="876" cy="60" r="4" fill="#98f3d7"/>
+    <text x="890" y="66" fill="#b5f5de" font-size="13" font-weight="650" letter-spacing="1">CLIENT-SIDE / LOCAL BY DESIGN</text>
+    <text x="48" y="145" fill="#f0f5ff" font-size="45" font-weight="750" letter-spacing="-1.5">Your agent ran. <tspan fill="#98f3d7">Read what happened.</tspan></text>
+    <text x="49" y="181" fill="#b6c4d9" font-size="19">Inspect the sequence. Question the patterns. Share deliberately.</text>
+
+    <rect x="48" y="214" width="676" height="310" rx="18" fill="#111d30" stroke="#30425b"/>
+    <text x="72" y="246" fill="#9baccc" font-size="12" font-weight="700" letter-spacing="1.6">SYNTHETIC TRACE / RECORDED ORDER</text>
+    <rect x="558" y="230" width="143" height="25" rx="12" fill="#243d39"/>
+    <text x="572" y="247" fill="#b5f5de" font-size="12">IN MEMORY ONLY</text>
+    <path d="M96 290v176" fill="none" stroke="#3b5372" stroke-width="2"/>
+    <g>
+      <circle cx="96" cy="291" r="10" fill="#8aaaf2"/>
+      <text x="122" y="287" fill="#e9effb" font-size="17" font-weight="650">Inspect the pagination helper</text>
+      <text x="122" y="310" fill="#9eafca" font-size="13">tool input → recorded output</text>
+      <rect x="570" y="281" width="116" height="8" rx="4" fill="#8aaaf2" opacity="0.75"/>
+      <text x="638" y="312" fill="#b5c6df" font-size="12">620 ms</text>
+      <circle cx="96" cy="366" r="10" fill="#edc27e"/>
+      <text x="122" y="363" fill="#e9effb" font-size="17" font-weight="650">Test reports a boundary error</text>
+      <text x="122" y="386" fill="#edc27e" font-size="13">explicit status · not an inferred cause</text>
+      <rect x="570" y="356" width="116" height="8" rx="4" fill="#edc27e" opacity="0.75"/>
+      <circle cx="96" cy="443" r="10" fill="#98f3d7"/>
+      <text x="122" y="440" fill="#e9effb" font-size="17" font-weight="650">Review a different sequence</text>
+      <text x="122" y="463" fill="#9eafca" font-size="13">descriptive comparison · no benchmark claim</text>
+    </g>
+    <text x="72" y="503" fill="#b5c6df" font-size="12">Manufactured events and timings. Nothing executed.</text>
+
+    <rect x="744" y="214" width="408" height="144" rx="18" fill="#162137" stroke="#344761"/>
+    <text x="770" y="247" fill="#bdacf6" font-size="12" font-weight="700" letter-spacing="1.6">HEURISTIC FINDINGS</text>
+    <text x="770" y="280" fill="#e9effb" font-size="21" font-weight="650">A starting point, not a verdict.</text>
+    <text x="770" y="310" fill="#b6c4d9" font-size="15">Errors · long calls · repeated input</text>
+    <text x="770" y="335" fill="#b6c4d9" font-size="13">Follow observations back to events.</text>
+
+    <rect x="744" y="374" width="408" height="150" rx="18" fill="#142d2c" stroke="#35615b"/>
+    <text x="770" y="407" fill="#98f3d7" font-size="12" font-weight="700" letter-spacing="1.6">STRUCTURE-ONLY EXPORT / DEFAULT</text>
+    <text x="770" y="440" fill="#e9effb" font-size="21" font-weight="650">Keep the sequence. Remove text.</text>
+    <text x="770" y="470" fill="#b6d2ca" font-size="15">Local JSON + standalone HTML</text>
+    <text x="770" y="496" fill="#efd39e" font-size="13">Review: metrics and timing can still be sensitive.</text>
+
+    <text x="49" y="563" fill="#98f3d7" font-size="16" font-weight="650">No backend. No telemetry. No API keys.</text>
+    <text x="49" y="595" fill="#9eafca" font-size="12">ORIGINAL PRODUCT ILLUSTRATION · NOT A SCREENSHOT · ALL DATA SYNTHETIC</text>
+    <text x="1151" y="591" text-anchor="end" fill="#aabbd4" font-size="13">Claude / Codex / OTLP / Native JSON</text>
+  </g>
+</svg>

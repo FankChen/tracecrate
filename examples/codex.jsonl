@@ -1,0 +1,7 @@
+{"type":"session_meta","payload":{"id":"synthetic-codex","originator":"synthetic-fixture"}}
+{"type":"turn_context","payload":{"model":"synthetic-model"}}
+{"type":"response_item","timestamp":"2026-01-01T00:00:00Z","payload":{"type":"function_call","call_id":"c1","name":"shell","arguments":"{\"command\":\"echo synthetic\"}"}}
+{"type":"response_item","timestamp":"2026-01-01T00:00:01Z","payload":{"type":"function_call_output","call_id":"c1","output":{"stdout":"synthetic","exit_code":0}}}
+{"type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":10,"cached_input_tokens":2,"output_tokens":3}}}}
+{"type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"Synthetic command finished."}]}}
+{"type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":15,"cached_input_tokens":4,"output_tokens":5}}}}

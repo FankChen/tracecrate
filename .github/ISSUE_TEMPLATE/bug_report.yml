@@ -1,0 +1,37 @@
+name: Bug report
+description: Report unexpected behavior with a synthetic reproduction only.
+title: '[Bug] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not paste raw logs, real Claude/Codex histories, prompts, private code, paths, credentials, or tokens—even pattern-redacted real histories.
+        Recreate the smallest example from scratch. For security issues, follow SECURITY.md; do not disclose exploit details publicly.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+      description: Describe the difference without copying sensitive source content.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps using synthetic data
+      description: Prefer the built-in demo; otherwise describe a hand-authored minimal shape. No raw error dumps.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Version and environment
+      description: App revision, browser version, OS, local/hosted, and source format. No private paths or URLs.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: This report contains no real histories, private data, or secrets; any reproduction is newly authored synthetic data.
+          required: true

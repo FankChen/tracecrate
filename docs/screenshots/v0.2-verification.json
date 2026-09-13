@@ -1,0 +1,23 @@
+{
+  "url": "https://fankchen.github.io/tracecrate/",
+  "version": "0.2.0",
+  "revision": "a95b96c1459b7454f88e5efb4d76af780ed1c661",
+  "browser": "153.0.8010.12",
+  "platform": "linux",
+  "viewport": {
+    "width": 1440,
+    "height": 1080
+  },
+  "syntheticOnly": true,
+  "checks": [
+    "version-meta",
+    "subpath-assets",
+    "cold-offline-import",
+    "status-filter",
+    "sequence-comparison",
+    "default-html-download",
+    "minimized-json-preview-download-agreement",
+    "zero-runtime-network",
+    "no-console-errors"
+  ]
+}

@@ -8,9 +8,9 @@
 
 [English](README.md) · [V0.2 调研与设计](docs/v0.2-design.md) · [格式说明](docs/formats.md) · [隐私边界](docs/privacy.md) · [参与贡献](CONTRIBUTING.md)
 
-![TraceCrate 合成示例实际截图：线上站点的已记录指标、时间线和选中的工具事件。](docs/screenshots/tracecrate-desktop.png)
+![TraceCrate V0.2 合成示例实际截图：线上筛选控件、已记录指标、时间线和工具详情。](docs/screenshots/tracecrate-v0.2-desktop.png)
 
-*历史 v0.1 线上实际截图，已目视检查；1440 × 2026 整页。事件与数值均为合成示例，不是性能评测结果；V0.2 新增控件未包含在此旧图中。*
+*来自 [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) 的 V0.2 线上实际截图，已目视检查；1440 × 2104 整页。事件与数值均为合成示例，不是性能评测结果。*
 
 TraceCrate 把你主动选择的 trace 文件变成可搜索的时间线、统计、启发式诊断和双会话对比。**无后端、无遥测、无账号、无需 API key**；不会运行 agent，也不会执行日志里的命令。
 
@@ -75,11 +75,11 @@ npm run dev
 
 `npm run check` 包括 lint、单元测试、浏览器测试类型检查及构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。`npm run package:release` 将已测试构建打包，附许可证与 SHA-256 校验和。
 
-**V0.2 候选已验证 · 2026-09-13：** [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321) 在 `29bfa6ff462b112030cb1af3035d7a1002704908` 通过 **225 项单元测试、全部 64 项浏览器测试**、lint、应用／浏览器 TypeScript 检查和构建；核心及适配器行覆盖率 97.51%（不含 UI）。本次文档提交时 Pages 与 release 验证仍待完成。[验收记录](docs/verification.md)区分候选结果和以下历史结果。
+**V0.2 已验证 · 2026-09-13：** [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077) 与 [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) 在 `a95b96c1459b7454f88e5efb4d76af780ed1c661` 成功：**225 项单元测试、全部 64 项浏览器测试**、lint、应用／浏览器 TypeScript 检查和构建通过；核心及适配器行覆盖率 97.51%（不含 UI）。实际公网 V0.2 还通过版本／子路径资源、首次离线导入、新筛选／比较、默认 HTML 与最小化 JSON 下载、预览一致性、零运行时网络请求和无 console 错误检查。已下载并目视审查真实截图。本次文档提交时仅剩 GitHub Release 发布步骤，详见[验收记录](docs/verification.md)。
 
-**已验证发布 · 2026-09-10：** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) 已在测试提交 `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715` 上创建。[CI 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) 通过 lint、TypeScript/构建、**107 项单元测试及 36 项桌面 Chromium / Pixel 7 模拟浏览器测试**。已记录核心及适配器代码行覆盖率 **96.58%（不含 UI）**。
+**历史首版 · 2026-09-10：** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) 在 `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715` 创建；当时的 107 项单元／36 项浏览器测试及 96.58% 核心行覆盖率仅为历史记录，不代替第二版验证。
 
-**线上验证：** [Pages 34462098830](https://github.com/FankChen/tracecrate/actions/runs/34462098830) 的构建、部署及实际公网 Playwright smoke 均成功：项目子路径资源、页面加载后切换离线且此前未导入时首次导入合成 Claude fixture、默认仅结构 HTML 下载，以及无 console/page 错误。上方截图来自该运行已下载的证据产物，详见[验收记录](docs/verification.md)。本地浏览器下载仍受限；不声称通过 Firefox/WebKit 或屏幕阅读器认证。社区发布帖和操作视频仍**未发布**。
+**验证边界：** 桌面 Chromium 与 Pixel 7 模拟浏览器运行在 GitHub Actions；本地浏览器下载仍受限。不声称通过真实移动设备、Firefox/WebKit 或屏幕阅读器认证。社区发布帖和操作视频仍**未发布**。详见[历史验收记录](docs/verification.md)。
 
 [CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署。[Release](.github/workflows/release.yml) 同样只允许默认分支手动触发，重新检查、审计并运行浏览器测试后才打包和发布，拒绝替换已有标签。[发布清单](docs/release.md) · [开放贡献任务与路线图](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
 

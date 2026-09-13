@@ -1,14 +1,17 @@
 # Verification record
 
-## V0.2 candidate · 2026-09-13
+## V0.2 implementation and public site verified · 2026-09-13
 
 - Research baseline: clean `1c92be40abb75114033ba2624e386e55e51f42e2`, synchronized with main; original 107 unit tests, lint, TypeScript and production build reproduced successfully before changes.
 - Candidate `bf3a2da308eb0f900b91eae5b1a3ff6a4a8ca863`: 225 unit tests, lint, application/browser TypeScript checks and production build passed locally on Node 24.21.0. Core/adapters coverage: **97.51% lines (589/604), 95.62% statements, 91.67% branches**; not React UI coverage. Machine-readable summary includes query/comparison/import-task modules.
 - `npm audit` (including development dependencies) reported zero known vulnerabilities at verification time. This is not a security audit or guarantee.
 - First candidate [CI 34747381885](https://github.com/FankChen/tracecrate/actions/runs/34747381885): **62/64 browser cases passed**, with only the keyboard modal-boundary test failing in both projects. Shift+Tab from the first modal button did not return to the last button in Chromium 153.0.8010.12 on Ubuntu. Explicit first/last focus wrapping was added; the original assertions remain. A new pass is required before release. Local Chromium is missing and enterprise download restrictions are not bypassed.
 - Corrected candidate `29bfa6ff462b112030cb1af3035d7a1002704908`: [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321) **passed 225 unit tests and all 64 browser tests (50.9 s)**, with no failed/flaky cases reported. Chromium 153.0.8010.12, GitHub-hosted Ubuntu, desktop and Pixel 7 emulation. Keyboard focus wrapping passed without removing assertions. Real-parser/offline/export tests remain separate from controlled worker lifecycle tests.
+- Main revision `a95b96c1459b7454f88e5efb4d76af780ed1c661` differs from that corrected candidate only in documentation. [Main CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077) and [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) **passed**. Pages independently reran all checks/browser tests, deployed and smoke-tested the actual public site.
+- Public smoke verified V0.2 metadata/subpath assets, cold first import offline, status filters, sequence comparison, default structure-only HTML, minimized JSON download/preview equality, absence of all selected numeric fields, zero runtime HTTP/WebSocket requests and no page/console errors. Browser Chromium 153.0.8010.12. This does not promise a fresh offline page load.
+- Actual [timeline screenshot](screenshots/tracecrate-v0.2-desktop.png) (1440 × 2104) and [export viewport screenshot](screenshots/tracecrate-v0.2-export.png) (1440 × 1080) were downloaded and visually reviewed, without alteration. The latter shows a scrollable dialog excerpt, not the entire report. [Machine-readable evidence](screenshots/v0.2-verification.json) records the deployed SHA/browser/checks. All content is synthetic; the first-release screenshot is retained separately.
 - Release packaging smoke succeeded with only static assets, synthetic demo data, build/deploy metadata, application license and runtime dependency notices. Local dirty-checkout packages are development smoke artifacts, **not published releases**; publication packages must use a clean tested revision and include SHA-256 checksums.
-- V0.2 browser validation is complete for the corrected candidate; no V0.2 release or Pages pass is claimed yet. V0.1 evidence below is historical only.
+- V0.2 local/browser/public-site validation is complete; GitHub Release publication is the remaining step at this record revision. V0.1 evidence below is historical only.
 
 ## v0.1.0 released · 2026-09-10
 

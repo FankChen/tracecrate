@@ -1,15 +1,20 @@
 # Changelog
 
-Published releases receive dated version headings; later documentation updates are listed separately.
+Version notes are prepared during release validation; actual publication is recorded in the [verification record](docs/verification.md).
 
 ## Unreleased
 
-- V0.2 candidate: status/minimum-duration filters, stable longest-first ordering, metadata search and keyboard focus return.
+No additional changes beyond the prepared V0.2 release.
+
+## 0.2.0 — 2026-09-13
+
+- Status/minimum-duration filters, stable longest-first ordering, metadata search and keyboard focus return.
 - Bounded event-sequence comparison with changed fields, scope/filter controls, pagination and original-event navigation.
 - Optional structure-only timing/token metadata minimization with preview/JSON/HTML agreement and schema-1 compatibility. Missing tool durations now remain unknown.
 - Independent import cancellation, ordinal progress, per-file deadline and stale-result cleanup.
 - Structured OTLP attributes, strict integer decoding and current cache-write alias with legacy fallback.
-- 225 synthetic unit tests and all 64 browser cases pass in [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321). Added browser-test typechecking and manual validated-release packaging with licenses/checksums. Pages/release evidence is pending at this candidate revision.
+- 225 synthetic unit tests and all 64 browser cases pass in [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077). Added browser-test typechecking and manual validated-release packaging with licenses/checksums.
+- [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) passed build, deployment and actual V0.2 public-site smoke: version/subpath assets, cold offline import, filters/comparison, default HTML, minimized JSON/preview agreement and zero runtime network/console errors. Actual [V0.2 screenshot](docs/screenshots/tracecrate-v0.2-desktop.png) was downloaded and visually reviewed.
 - Fixed modal first/last keyboard focus wrapping found by the new real-Chromium walkthrough; original assertions retained.
 - [Research and V0.2 design](docs/v0.2-design.md), [release notes](docs/releases/v0.2.0.md) and [keyboard walkthrough](docs/keyboard.md).
 

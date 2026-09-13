@@ -8,9 +8,9 @@
 
 [简体中文](README.zh-CN.md) · [V0.2 research & design](docs/v0.2-design.md) · [Format guide](docs/formats.md) · [Privacy](docs/privacy.md) · [Contributing](CONTRIBUTING.md)
 
-![Synthetic demo screenshot: TraceCrate's recorded metrics, timeline, and selected tool event on the live site.](docs/screenshots/tracecrate-desktop.png)
+![V0.2 synthetic demo screenshot: focused timeline controls, recorded metrics and selected tool event on the live site.](docs/screenshots/tracecrate-v0.2-desktop.png)
 
-*Historical v0.1 live-site screenshot, visually reviewed; 1440 × 2026 full page. All events and values are synthetic demo data, not benchmark results. V0.2 adds controls beyond this image.*
+*Actual V0.2 live-site screenshot from [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675), visually reviewed; 1440 × 2104 full page. All events and values are synthetic demo data, not benchmark results.*
 
 TraceCrate turns files you choose into a searchable timeline, recorded metrics, heuristic diagnostics, and side-by-side comparisons. No backend, no telemetry, no accounts, no API keys. It reads traces; it does not run agents or execute recorded commands.
 
@@ -75,11 +75,11 @@ The app has no trace-upload or telemetry path. That does **not** make every envi
 
 `npm run check` runs lint, unit tests, browser-test typechecking and the production build. `npm run test:e2e` invokes Playwright; browser binaries must be installed separately. `npm run package:release` packages an already-tested build with licenses and SHA-256 checksums. See [contribution checks](CONTRIBUTING.md).
 
-**V0.2 candidate verified · 2026-09-13:** [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321) passed **225 unit tests and all 64 browser tests**, lint, application/browser TypeScript checks and production build at `29bfa6ff462b112030cb1af3035d7a1002704908`. Core/adapters line coverage is 97.51% (not UI coverage). Pages/release checks are pending at this documentation revision. The [verification record](docs/verification.md) distinguishes candidate evidence from the historical results below.
+**V0.2 verified · 2026-09-13:** [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077) and [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) passed at `a95b96c1459b7454f88e5efb4d76af780ed1c661`: **225 unit tests and all 64 browser tests**, lint, application/browser TypeScript checks and production build. Core/adapters line coverage is 97.51% (not UI coverage). The actual public V0.2 site also passed version/subpath loading, cold offline import, new filters/comparison, default HTML and minimized JSON downloads, preview agreement and zero runtime network/console errors. Screenshots were downloaded and visually reviewed. GitHub Release publication is the remaining step at this documentation revision; see [verification](docs/verification.md).
 
-**Verified release · 2026-09-10:** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`. [CI run 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) passed lint, TypeScript/build, **107 unit tests and 36 desktop Chromium / Pixel 7 emulation browser tests**. Recorded core/adapters line coverage is **96.58% (not UI coverage)**.
+**Historical first release · 2026-09-10:** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`; its 107 unit / 36 browser tests and 96.58% core/adapters line coverage are historical, not substituted for V0.2 checks.
 
-**Live verification:** [Pages run 34462098830](https://github.com/FankChen/tracecrate/actions/runs/34462098830) succeeded in build, deployment, and Playwright smoke against the actual public site: subpath assets, cold offline first import using a synthetic Claude fixture after page load, default structure-only HTML download, and no console/page errors. The screenshot above comes from its downloaded evidence artifact. See the [verification record](docs/verification.md). Local browser downloads remain blocked; Firefox/WebKit and screen-reader certification are not claimed. Launch posts and the interaction video are **not published**.
+**Verification limits:** Chromium desktop and Pixel 7 emulation run in GitHub Actions; local browser downloads remain blocked. This is not physical-device, Firefox/WebKit or screen-reader certification. Launch posts and the interaction video are **not published**. See [verification history](docs/verification.md).
 
 - [CI workflow](.github/workflows/ci.yml) — Node 24, checks, Chromium E2E.
 - [Manual Pages workflow](.github/workflows/pages.yml) — default branch only; enable Pages → GitHub Actions, then dispatch manually. [Publication checklist](docs/release.md).

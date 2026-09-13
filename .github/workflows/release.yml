@@ -41,6 +41,7 @@ jobs:
           test -f "docs/releases/v$VERSION.md"
           npm run package:release
           cp "docs/releases/v$VERSION.md" release-assets/release-notes.md
+          printf '\n\n## Publication provenance\n\nValidated source commit: `%s`. [Release validation run](https://github.com/%s/actions/runs/%s). The workflow completed unit/browser tests, coverage, dependency audit, build and archive checksum verification before publication.\n' "$GITHUB_SHA" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" >> release-assets/release-notes.md
       - name: Preserve validation evidence
         if: always()
         uses: actions/upload-artifact@v4

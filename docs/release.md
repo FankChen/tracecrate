@@ -4,6 +4,8 @@
 
 **Repository:** [FankChen/tracecrate](https://github.com/FankChen/tracecrate). See the [verification record](verification.md) for actual checks and the README for live deployment status. This checklist also applies to future releases; a package version alone is not a published release.
 
+**V0.2 pre-publication checks · 2026-09-13:** 225 unit / 64 browser tests passed in [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077); [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) passed build, deployment and actual V0.2 public smoke. Real screenshots were downloaded and reviewed. The manual Release workflow below must still complete for publication; the next section is historical V0.1 evidence.
+
 **Published snapshot · 2026-09-10:** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`. The [live demo](https://fankchen.github.io/tracecrate/) is deployed and interactively verified.
 
 ## Completed v0.1.0 evidence

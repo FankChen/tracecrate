@@ -10,6 +10,7 @@ import ExportDialog from './components/ExportDialog';
 import { useTraceImport } from './components/useTraceImport';
 import { clip, duration, number } from './components/format';
 import './App.css';
+import './components/workbench-v2.css';
 
 const tabs = [{ id: 'timeline', label: 'Timeline', icon: Activity }, { id: 'insights', label: 'Insights', icon: Fingerprint }, { id: 'compare', label: 'Compare', icon: GitCompareArrows }] as const;
 type Tab = typeof tabs[number]['id'];
@@ -27,11 +28,12 @@ export default function App() {
   const dragDepth = useRef(0);
   const trace = sessions.find((session) => session.id === activeId) ?? sessions[0];
   const stats = useMemo(() => trace ? getStats(trace) : undefined, [trace]);
-  const { busy, notice, importFiles, reset: resetImport } = useTraceImport((loaded) => {
+  const { busy, notice, importFiles, reset: resetImport, cancel: cancelImport } = useTraceImport((loaded) => {
     setSessions((previous) => [...previous, ...loaded]);
     setActiveId(loaded[0].id);
     setSelectedId(null);
     setTab('timeline');
+    setExportOpen(false);
   });
   const selectSession = (id: string) => { setActiveId(id); setSelectedId(null); setExportOpen(false); };
   const clear = () => {
@@ -51,7 +53,17 @@ export default function App() {
     try { await importFiles(files, sessions.length); }
     finally { if (generation === inputGeneration.current && input.current) input.current.value = ''; }
   };
-  const showEvent = (id: string) => { setSelectedId(id); setTab('timeline'); };
+  const showEvent = (id: string, sessionId?: string) => {
+    if (sessionId) setActiveId(sessionId);
+    setSelectedId(id); setTab('timeline'); setExportOpen(false);
+    requestAnimationFrame(() => document.querySelector<HTMLElement>('.event-detail')?.focus());
+  };
+  const cancelPendingImport = () => {
+    inputGeneration.current++;
+    cancelImport();
+    if (input.current) input.current.value = '';
+    requestAnimationFrame(() => document.getElementById('choose-files')?.focus());
+  };
   const metrics = stats ? [
     { label: 'Reported tokens', value: number(stats.usage ? stats.usage.input + stats.usage.output : undefined), caption: stats.usage ? `${number(stats.usage.input)} in · ${number(stats.usage.output)} out` : 'Not present in this trace', icon: Braces, className: 'mint' },
     { label: 'Tool calls', value: number(stats.tools), caption: 'Observed in the sequence', icon: Terminal, className: 'purple' },
@@ -69,13 +81,14 @@ export default function App() {
       <nav className="sessions" aria-label="Loaded sessions">{sessions.map((session) => <button type="button" key={session.id} className={`session-button ${session.id === trace?.id ? 'active' : ''}`} aria-current={session.id === trace?.id ? 'true' : undefined} onClick={() => selectSession(session.id)}><FileJson size={17} aria-hidden="true" /><span><strong>{clip(session.name, 64)}</strong><small>{session.demo ? 'Synthetic demo' : clip(session.source, 40)}<span> · {number(session.events.length)} events</span></small></span>{session.id === trace?.id && <span className="active-dot" />}</button>)}</nav>
       {!sessions.length && <p className="sidebar-empty">A clean slate.<br />Your next trace goes here.</p>}
       <button type="button" className="subtle-button load-demo" onClick={loadDemo} disabled={busy || sessions.some((session) => session.demo) || sessions.length > 8}><FlaskConical size={15} aria-hidden="true" />Load synthetic demo</button>
-      <div className="sidebar-bottom"><div className="local-card"><ShieldCheck size={19} aria-hidden="true" /><h3>Your traces stay yours.</h3><p>No accounts. No telemetry.<br />No trace uploads to a server.</p><span><span className="status-dot" />LOCAL BY DESIGN</span></div><button type="button" className="subtle-button clear-button" onClick={clear}><Trash2 size={15} aria-hidden="true" />Clear sessions</button><div className="sidebar-footer"><span>TRACECRATE</span><span>LOCAL / 01</span></div></div>
+      <div className="sidebar-bottom"><div className="local-card"><ShieldCheck size={19} aria-hidden="true" /><h3>Your traces stay yours.</h3><p>No accounts. No telemetry.<br />No trace uploads to a server.</p><span><span className="status-dot" />LOCAL BY DESIGN</span></div><button type="button" className="subtle-button clear-button" onClick={clear}><Trash2 size={15} aria-hidden="true" />Clear sessions</button><div className="sidebar-footer"><span>TRACECRATE</span><span>V0.2 / LOCAL</span></div></div>
     </aside>
     <div className="workspace">
       <header className="topbar"><div className="breadcrumb"><Layers3 size={15} aria-hidden="true" /><span>Workspace</span><ChevronRight size={12} aria-hidden="true" /><strong>Trace explorer</strong></div><span className="privacy-pill"><span className="status-dot" /><LockKeyhole size={12} aria-hidden="true" />Local only<span className="privacy-extra"> · private by default</span></span></header>
       <main id="main-content" tabIndex={-1}>
         <section className="hero"><div><span className="eyebrow hero-eyebrow"><span />THE AFTER-RUN WORKSPACE</span><h1>Your agent ran.<br /><span>Now understand why.</span></h1><p>Turn agent traces into a readable sequence.<br className="desktop-break" /> Inspect tool calls, spot repeated work, and compare what happened.</p></div><div className="hero-art" aria-hidden="true"><div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" /><div className="art-core"><Box size={42} strokeWidth={1} /></div><span className="art-node node-one"><Braces size={18} /></span><span className="art-node node-two"><Terminal size={18} /></span><span className="art-node node-three"><Check size={18} /></span><span className="art-caption">SIGNAL, NOT GUESSWORK</span></div></section>
-        <section className="import-strip" aria-label="Import a trace"><div className="upload-icon"><Upload size={20} aria-hidden="true" /></div><div className="import-description"><label htmlFor="trace-upload">Drop a trace. See the whole story.</label><p>Claude Code · Codex · OpenTelemetry · TraceCrate JSON</p><small id="upload-limits">JSON / JSONL · up to 5 files per selection · 20 MiB each · 10 sessions in memory</small></div><div className="upload-control"><input ref={input} id="trace-upload" type="file" accept=".json,.jsonl,.ndjson,application/json,application/x-ndjson" multiple disabled={busy} aria-describedby="upload-limits" onChange={(event) => { void acceptFiles(Array.from(event.currentTarget.files ?? [])); }} /><button type="button" disabled={busy} onClick={() => input.current?.click()}>{busy ? 'Importing…' : 'Choose files'}<ArrowUpRight size={15} aria-hidden="true" /></button></div></section>
+        <section className="import-strip" aria-label="Import a trace"><div className="upload-icon"><Upload size={20} aria-hidden="true" /></div><div className="import-description"><label htmlFor="trace-upload">Drop a trace. See the whole story.</label><p>Claude Code · Codex · OpenTelemetry · TraceCrate JSON</p><small id="upload-limits">JSON / JSONL · up to 5 files per selection · 20 MiB each · 10 sessions in memory</small></div><div className="upload-control"><input ref={input} id="trace-upload" type="file" accept=".json,.jsonl,.ndjson,application/json,application/x-ndjson" multiple disabled={busy} aria-describedby="upload-limits" onChange={(event) => { void acceptFiles(Array.from(event.currentTarget.files ?? [])); }} /><button id="choose-files" type="button" disabled={busy} onClick={() => input.current?.click()}>{busy ? 'Importing…' : 'Choose files'}<ArrowUpRight size={15} aria-hidden="true" /></button></div></section>
+        {busy && <div className="import-progress"><span>Reading and parsing locally. Existing sessions are unchanged until the batch finishes.</span><button type="button" onClick={cancelPendingImport}>Cancel import</button></div>}
         <p className={`import-status ${notice ? 'visible' : ''}`} role="status" aria-live="polite">{notice}</p>
         {trace && stats ? <>
           <section className="run-heading"><div><div className="run-kicker"><span className="eyebrow">SESSION OVERVIEW</span>{trace.demo && <span className="demo-badge"><FlaskConical size={12} aria-hidden="true" />Synthetic demo</span>}</div><h2>{clip(trace.name, 160)}</h2><p>{clip(trace.source, 100)}<span> / </span>{number(stats.events)} recorded events<span> / </span>{stats.models.length ? clip(stats.models.join(', '), 100) : 'Model not reported'}</p></div><button type="button" className="export-button" onClick={() => setExportOpen(true)}><ArrowDownToLine size={15} aria-hidden="true" />Export report</button></section>
@@ -87,7 +100,7 @@ export default function App() {
             const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length : event.key === 'ArrowLeft' ? (index + tabs.length - 1) % tabs.length : event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : -1;
             if (next >= 0) { event.preventDefault(); setTab(tabs[next].id); document.getElementById(`tab-${tabs[next].id}`)?.focus(); }
           }}><Icon size={16} aria-hidden="true" />{label}{id === 'timeline' && <span className="count-badge">{number(stats.events)}</span>}</button>)}</div><span className="explorer-caption"><span className="status-dot" />READ-ONLY EXPLORER</span></div>
-            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} key={`${epoch}-${trace.id}-${tab}`} tabIndex={0}>{tab === 'timeline' && <Timeline trace={trace} selectedId={selectedId} onSelect={setSelectedId} />}{tab === 'insights' && <Insights trace={trace} onSelect={showEvent} />}{tab === 'compare' && <Compare sessions={sessions} />}</div>
+            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} key={`${epoch}-${trace.id}-${tab}`} tabIndex={0}>{tab === 'timeline' && <Timeline trace={trace} selectedId={selectedId} onSelect={setSelectedId} />}{tab === 'insights' && <Insights trace={trace} onSelect={showEvent} />}{tab === 'compare' && <Compare sessions={sessions} onInspect={(sessionId, eventId) => showEvent(eventId, sessionId)} />}</div>
           </section>
         </> : <section className="empty-workspace"><span className="empty-cube"><Box size={40} strokeWidth={1.3} aria-hidden="true" /></span><span className="eyebrow">NOTHING RETAINED</span><h2>A fresh workspace.</h2><p>Import a trace to begin, or explore the synthetic demo.<br />Your sessions live in memory and disappear on reload or clear.</p><button type="button" className="primary" disabled={busy} onClick={loadDemo}><RotateCcw size={16} aria-hidden="true" />Load synthetic demo</button></section>}
         <footer className="main-footer"><span><LockKeyhole size={12} aria-hidden="true" />Processed in your browser. Gone when you leave.</span><span>Evidence first. Always.</span></footer>

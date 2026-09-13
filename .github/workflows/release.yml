@@ -1,0 +1,88 @@
+name: Release
+
+# An explicit maintainer action; no release from pushes, tags or pull requests.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate release candidate
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run test:coverage
+      - run: npm audit
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Record version and package the tested static build
+        id: version
+        run: |
+          VERSION=$(node --input-type=module -e 'import p from "./package.json" with {type:"json"}; if (!/^\d+\.\d+\.\d+$/.test(p.version)) process.exit(1); console.log(p.version)')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          test -f "docs/releases/v$VERSION.md"
+          npm run package:release
+          cp "docs/releases/v$VERSION.md" release-assets/release-notes.md
+      - name: Preserve validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-verification
+          path: |
+            coverage/
+            playwright-report/
+            test-results/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: release-assets/
+          retention-days: 14
+
+  publish:
+    name: Publish tested release
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+          path: release-assets
+      - name: Create a new tag and release, never replace an existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.validate.outputs.version }}
+          REVISION: ${{ github.sha }}
+        run: |
+          TAG="v$VERSION"
+          if gh api "repos/$GH_REPO/git/ref/tags/$TAG" --silent 2>/dev/null; then
+            echo "Tag already exists; refusing to replace it."
+            exit 1
+          fi
+          cd release-assets
+          sha256sum --check SHA256SUMS.txt
+          gh release create "$TAG" "tracecrate-$TAG-site.tar.gz" SHA256SUMS.txt \
+            --target "$REVISION" --title "TraceCrate $TAG — focus, compare, share deliberately" \
+            --notes-file release-notes.md --latest

@@ -13,7 +13,7 @@ export default defineConfig({
       include: ['src/core/**/*.ts', 'src/adapters/**/*.ts'],
       exclude: ['src/**/*.test.ts', 'src/core/types.ts'],
       excludeAfterRemap: false,
-      reporter: ['text', 'html'],
+      reporter: ['text', 'html', 'json-summary'],
     },
   },
 })

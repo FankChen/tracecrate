@@ -1,10 +1,12 @@
 {
   "name": "tracecrate",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A local-first workbench for AI agent traces. Inspect, compare, and share without uploading your logs.",
   "license": "MIT",
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,9 +17,12 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm test && npm run build"
+    "typecheck:e2e": "tsc -p tsconfig.e2e.json",
+    "package:release": "node scripts/package-release.mjs",
+    "check": "npm run lint && npm test && npm run typecheck:e2e && npm run build"
   },
   "dependencies": {
+    "diff": "^9.0.0",
     "lucide-react": "^1.44.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

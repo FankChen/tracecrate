@@ -7,11 +7,17 @@ function attributeValue(value: unknown): unknown {
   if (typeof item.stringValue === 'string') return item.stringValue;
   if (typeof item.boolValue === 'boolean') return item.boolValue;
   if (item.intValue !== undefined) {
-    const n = Number(item.intValue);
+    const integer = item.intValue;
+    if (typeof integer !== 'number' && (typeof integer !== 'string' || integer.trim() !== integer || !/^-?\d+$/.test(integer))) return undefined;
+    const n = Number(integer);
     return Number.isSafeInteger(n) ? n : undefined;
   }
   if (typeof item.doubleValue === 'number' && Number.isFinite(item.doubleValue)) return item.doubleValue;
-  if (Array.isArray(record(item.arrayValue).values)) return (record(item.arrayValue).values as unknown[]).map(attributeValue);
+  const elements = record(item.arrayValue).values;
+  // Unsupported elements are omitted, not serialized as fabricated nulls.
+  if (Array.isArray(elements)) return elements.map(attributeValue).filter((element) => element !== undefined);
+  const entries = record(item.kvlistValue).values;
+  if (Array.isArray(entries)) return attributes(entries);
   return undefined;
 }
 
@@ -20,7 +26,9 @@ function attributes(value: unknown): Record<string, unknown> {
   if (!Array.isArray(value)) return result;
   for (const entry of value) {
     const item = record(entry);
-    if (typeof item.key === 'string') result[item.key] = attributeValue(item.value);
+    if (typeof item.key !== 'string') continue;
+    const decoded = attributeValue(item.value);
+    if (decoded !== undefined) result[item.key] = decoded;
   }
   return result;
 }
@@ -62,7 +70,7 @@ const adapter: Adapter = {
               builder.warn('OTLP span without a name or spanId ignored.');
               continue;
             }
-            const attrs = { ...resourceAttributes, ...attributes(span.attributes) };
+            const attrs: Record<string, unknown> = Object.assign(Object.create(null), resourceAttributes, attributes(span.attributes));
             const start = nanos(span.startTimeUnixNano);
             const end = nanos(span.endTimeUnixNano);
             if ((span.startTimeUnixNano !== undefined && start === undefined) || (span.endTimeUnixNano !== undefined && end === undefined)) builder.warn('Invalid or unsafe OTLP nanosecond timestamps omitted. Export nanoseconds as decimal strings.');
@@ -71,7 +79,10 @@ const adapter: Adapter = {
             const callId = string(attrs['gen_ai.tool.call.id']);
             const isTool = !!(toolName || callId || attrs['gen_ai.operation.name'] === 'execute_tool');
             const status = record(span.status).code;
-            const usage = totalUsage(number(attrs['gen_ai.usage.input_tokens']), number(attrs['gen_ai.usage.output_tokens']), number(attrs['gen_ai.usage.cache_read.input_tokens']), number(attrs['gen_ai.usage.cache_creation.input_tokens']));
+            const cacheWrite = number(attrs['gen_ai.usage.cache_write.input_tokens']);
+            const legacyCacheWrite = number(attrs['gen_ai.usage.cache_creation.input_tokens']);
+            if (cacheWrite !== undefined && legacyCacheWrite !== undefined && cacheWrite !== legacyCacheWrite) builder.warn('Conflicting OTLP cache-write aliases; current cache-write value preferred.');
+            const usage = totalUsage(number(attrs['gen_ai.usage.input_tokens']), number(attrs['gen_ai.usage.output_tokens']), number(attrs['gen_ai.usage.cache_read.input_tokens']), cacheWrite ?? legacyCacheWrite);
             if (usage) usages.push(usage);
             const input = attrs['gen_ai.tool.call.arguments'] ?? attrs['gen_ai.tool.input'] ?? attrs['gen_ai.input.messages'] ?? attrs['gen_ai.prompt'];
             const output = attrs['gen_ai.tool.call.result'] ?? attrs['gen_ai.tool.output'] ?? attrs['gen_ai.output.messages'] ?? attrs['gen_ai.completion'];

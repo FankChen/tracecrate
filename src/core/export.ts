@@ -4,11 +4,18 @@ import type { EventKind, Trace, TraceEvent, Usage } from './types';
 
 export type RedactionMode = 'patterns' | 'structure';
 
+/** Opt-in metadata removal; supported only by structure-only exports. */
+export interface ExportOptions {
+  omitTiming?: boolean;
+  omitUsage?: boolean;
+}
+
 const REMOVED = '[Removed for sharing]';
 const REDACTED = '[REDACTED]';
 const MAX_SCRUB_DEPTH = 60;
 const PATTERN_WARNING = 'BEST-EFFORT REDACTION ONLY: Code and text are preserved and may contain sensitive information. Review every field before sharing. Pattern matching is not a security guarantee.';
 const STRUCTURE_WARNING = 'Content removed. Metrics and event structure retained.';
+const MINIMIZED_WARNING = 'Content removed. Event counts, kinds, statuses, order, remapped relationships and demo flag retained. Remaining metadata may still be sensitive. Review before sharing.';
 const BEST_EFFORT = 'Sharing exports are best effort, not a security guarantee. Review before sharing.';
 const SECRET_KEY = /^(?:(?:[\w.-]+[_.-])?(?:api[_-]?key|access[_-]?token|refresh[_-]?token|auth[_-]?token|token|password|passwd|pwd|secret|client[_-]?secret|private[_-]?key|authorization|credentials?))$/i;
 const ASSIGNMENT = /((?:["']?)(?:(?:[\w.-]+[_.-])?(?:api[_-]?key|access[_-]?token|refresh[_-]?token|auth[_-]?token|token|password|passwd|pwd|secret|client[_-]?secret|private[_-]?key|authorization|credentials?))(?:["']?)\s*[:=]\s*)("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[^\s,;}&]+)/gi;
@@ -86,8 +93,12 @@ function numericUsage(usage: Usage | undefined): Usage | undefined {
 }
 
 /** Pure, best-effort sharing transform. Structure mode uses a strict allowlist. */
-export function redactTrace(trace: Trace, mode: RedactionMode = 'structure'): Trace {
+export function redactTrace(trace: Trace, mode: RedactionMode = 'structure', options: ExportOptions = {}): Trace {
   if (mode !== 'patterns' && mode !== 'structure') throw new Error('Unknown redaction mode');
+  const { omitTiming = false, omitUsage = false } = options;
+  if (mode === 'patterns' && (omitTiming || omitUsage)) {
+    throw new Error('Metadata minimization requires structure-only mode. Preserved free text may contain timing and token usage.');
+  }
   const ids = new Map<string, string>();
   trace.events.forEach((event, index) => {
     // Invalid duplicate original IDs resolve consistently to the first event.
@@ -111,9 +122,9 @@ export function redactTrace(trace: Trace, mode: RedactionMode = 'structure'): Tr
       clean.parentId = ids.get(event.parentId);
     }
     if (mode === 'structure') {
-      if (finite(event.timestamp)) clean.timestamp = event.timestamp;
-      if (finite(event.durationMs) && event.durationMs >= 0) clean.durationMs = event.durationMs;
-      const usage = numericUsage(event.usage);
+      if (!omitTiming && finite(event.timestamp)) clean.timestamp = event.timestamp;
+      if (!omitTiming && finite(event.durationMs) && event.durationMs >= 0) clean.durationMs = event.durationMs;
+      const usage = omitUsage ? undefined : numericUsage(event.usage);
       if (usage) clean.usage = usage;
     }
     return clean;
@@ -129,15 +140,20 @@ export function redactTrace(trace: Trace, mode: RedactionMode = 'structure'): Tr
   result.warnings = mode === 'patterns'
     ? [PATTERN_WARNING, ...trace.warnings.map((warning) => scrubText(warning))] : [STRUCTURE_WARNING];
   if (mode === 'structure') {
-    const usage = numericUsage(trace.usage);
+    if (omitTiming || omitUsage) result.warnings = [
+      MINIMIZED_WARNING,
+      omitTiming ? 'Timing metadata omitted from every event.' : 'Recorded timing metadata retained when present.',
+      omitUsage ? 'Token usage omitted from events and trace.' : 'Recorded token usage retained when present.',
+    ];
+    const usage = omitUsage ? undefined : numericUsage(trace.usage);
     if (usage) result.usage = usage;
     if (typeof trace.demo === 'boolean') result.demo = trace.demo;
   }
   return result;
 }
 
-export function exportTraceJson(trace: Trace, mode: RedactionMode = 'structure'): string {
-  return JSON.stringify(redactTrace(trace, mode), null, 2);
+export function exportTraceJson(trace: Trace, mode: RedactionMode = 'structure', options: ExportOptions = {}): string {
+  return JSON.stringify(redactTrace(trace, mode, options), null, 2);
 }
 
 function escapeHtml(value: unknown): string {
@@ -147,8 +163,8 @@ function escapeHtml(value: unknown): string {
 }
 
 /** Standalone, script-free report: details/summary work without JavaScript. */
-export function exportTraceHtml(trace: Trace, mode: RedactionMode = 'structure'): string {
-  const shared = redactTrace(trace, mode);
+export function exportTraceHtml(trace: Trace, mode: RedactionMode = 'structure', options: ExportOptions = {}): string {
+  const shared = redactTrace(trace, mode, options);
   const stats = getStats(shared);
   const number = (value: number | undefined) => value === undefined ? 'Unknown' : escapeHtml(value);
   const metric = (label: string, value: string) =>
@@ -175,7 +191,7 @@ export function exportTraceHtml(trace: Trace, mode: RedactionMode = 'structure')
 <section class="notice" aria-label="Sharing notice"><strong>Review before sharing</strong>${shared.warnings.map((warning) => `<p>${escapeHtml(warning)}</p>`).join('')}<p>${BEST_EFFORT}</p></section>
 <section aria-label="Summary" class="metrics">${metric('Events', number(stats.events))}${metric('Tool calls', number(stats.tools))}${metric('Errors', number(stats.errors))}${metric('Elapsed (ms)', number(stats.durationMs))}${metric('Input tokens', number(stats.usage?.input))}${metric('Output tokens', number(stats.usage?.output))}${metric('Cache read (included)', number(stats.usage?.cacheRead))}${metric('Cache write (included)', number(stats.usage?.cacheWrite))}</section>
 <p class="muted">Elapsed time uses recorded timestamps and known ends, not summed tool durations. Input tokens already include cached input.</p>
-<h2>Tools</h2><p class="muted">Recorded duration sums are not wall time; calls may overlap. Missing tool durations contribute no recorded milliseconds.</p>
+<h2>Tools</h2><p class="muted">Recorded duration sums are not wall time; calls may overlap. Sums include only known durations and may be partial. Unknown means no measured calls, not zero.</p>
 ${tools ? `<div class="table-wrap"><table><thead><tr><th scope="col">Tool</th><th scope="col">Calls</th><th scope="col">Errors</th><th scope="col">Recorded duration sum (ms)</th></tr></thead><tbody>${tools}</tbody></table></div>` : '<p class="muted">No tool calls recorded.</p>'}
 <h2>Events</h2><p class="muted">Expand an event to inspect its shared details.</p>${events || '<p class="muted">No events recorded.</p>'}
 <footer>Made with TraceCrate · Offline report · No scripts or external assets</footer>

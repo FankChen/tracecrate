@@ -4,8 +4,9 @@ export interface ToolBreakdown {
   name: string;
   calls: number;
   errors: number;
-  /** Sum of observed tool durations, NOT elapsed wall time (calls may overlap). */
-  durationMs: number;
+  /** Sum of known durations only; may be partial, NOT wall time (calls may overlap).
+   * Absent when no valid durations were observed; recorded zero remains zero. */
+  durationMs?: number;
 }
 
 const isNumber = (value: unknown): value is number =>
@@ -58,12 +59,12 @@ export function getToolBreakdown(trace: Trace): ToolBreakdown[] {
   for (const event of trace.events) {
     if (event.kind !== 'tool') continue;
     const group = groups.get(event.name) ?? {
-      name: event.name, calls: 0, errors: 0, durationMs: 0,
+      name: event.name, calls: 0, errors: 0,
     };
     group.calls += 1;
     group.errors += Number(event.status === 'error');
     if (isNumber(event.durationMs) && event.durationMs >= 0) {
-      group.durationMs += event.durationMs;
+      group.durationMs = (group.durationMs ?? 0) + event.durationMs;
     }
     groups.set(event.name, group);
   }

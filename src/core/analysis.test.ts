@@ -89,10 +89,34 @@ describe('getToolBreakdown', () => {
     expect(getToolBreakdown(run)).toEqual([
       { name: 'b', calls: 2, errors: 1, durationMs: 200 },
       { name: 'a', calls: 1, errors: 0, durationMs: 40 },
-      { name: 'c', calls: 1, errors: 0, durationMs: 0 },
+      { name: 'c', calls: 1, errors: 0 },
     ]);
     getStats(run);
     getFindings(run);
+    expect(run).toEqual(before);
+  });
+  it('leaves missing or invalid durations unknown rather than fabricating zero', () => {
+    const run = trace([
+      event(), event({ durationMs: NaN }), event({ durationMs: Infinity }), event({ durationMs: -1 }),
+    ]);
+    const [tool] = getToolBreakdown(run);
+    expect(tool).toEqual({ name: 'shell', calls: 4, errors: 0 });
+    expect(tool.durationMs).toBeUndefined();
+  });
+  it('preserves recorded zero even among unknown calls, regardless of order', () => {
+    for (const events of [[event(), event({ durationMs: 0 })], [event({ durationMs: 0 }), event()]]) {
+      expect(getToolBreakdown(trace(events))).toEqual([
+        { name: 'shell', calls: 2, errors: 0, durationMs: 0 },
+      ]);
+    }
+  });
+  it('reports a partial sum of known durations without treating unknown calls as measured', () => {
+    const run = trace([
+      event(), event({ durationMs: 12 }), event({ durationMs: 0 }),
+      event({ durationMs: NaN }), event({ durationMs: 8 }), event(),
+    ]);
+    const before = structuredClone(run);
+    expect(getToolBreakdown(run)).toEqual([{ name: 'shell', calls: 6, errors: 0, durationMs: 20 }]);
     expect(run).toEqual(before);
   });
 });

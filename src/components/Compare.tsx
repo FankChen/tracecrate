@@ -3,8 +3,9 @@ import { ArrowRight, GitCompareArrows, Info } from 'lucide-react';
 import { getStats, getToolBreakdown } from '../core/analysis';
 import type { Trace } from '../core/types';
 import { clip, duration, number } from './format';
+import EventComparison from './EventComparison';
 
-export default function Compare({ sessions }: { sessions: Trace[] }) {
+export default function Compare({ sessions, onInspect }: { sessions: Trace[]; onInspect: (sessionId: string, eventId: string) => void }) {
   const [leftId, setLeftId] = useState(sessions[0]?.id ?? '');
   const [rightId, setRightId] = useState(sessions[1]?.id ?? '');
   const left = sessions.find((trace) => trace.id === leftId) ?? sessions[0];
@@ -34,5 +35,6 @@ export default function Compare({ sessions }: { sessions: Trace[] }) {
       const bv = bt.find((tool) => tool.name === name)?.calls ?? 0;
       return <tr key={name}><th scope="row" className="tool-name">{clip(name, 100)}</th><td>{number(av)}</td><td>{number(bv)}</td><td>{bv - av > 0 ? '+' : ''}{number(bv - av)}</td></tr>;
     })}</tbody></table></div>{!toolNames.length && <p className="muted">Neither session contains tool calls.</p>}{toolNames.length > 100 && <p className="footnote">First 100 tool names shown.</p>}
+    <EventComparison key={`${left.id}:${right.id}`} left={left} right={right} onInspect={onInspect} />
   </section>;
 }

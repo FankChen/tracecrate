@@ -1,0 +1,54 @@
+/* V0.2 workflow surfaces; source data remains in memory, not in DOM attributes. */
+.focus-filters { display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px; padding:12px 16px; background:#0d131d; border-bottom:1px solid #263040; }
+.focus-filters label, .comparison-controls>label:not(.checkbox-label) { display:grid; gap:5px; font-size:10px; color:#aebbd0; min-width:0; flex:1 1 115px; }
+.focus-filters select, .focus-filters input, .comparison-controls select { width:100%; min-width:0; padding:7px 8px; font-size:11px; border:1px solid #364257; border-radius:6px; background:#121b28; color:#e1e8f3; }
+.focus-filters input { max-width:160px; }
+.focus-filters .reset-filters { font-size:10px; padding:7px 9px; }
+.focus-note { flex-basis:100%; font-size:10px; margin:0; color:#bdc9d9; }
+.event-detail:focus-visible { outline-offset:-3px; }
+.import-progress { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0 0; font-size:11px; color:#c3d4e7; }
+.import-progress button { flex-shrink:0; border-color:#779473; color:#d1f6c9; font-size:11px; }
+.event-comparison { margin-top:30px; padding-top:25px; border-top:1px solid #354056; min-width:0; }
+.comparison-heading { display:flex; align-items:center; justify-content:space-between; gap:15px; }
+.comparison-heading h3 { display:flex; align-items:center; gap:8px; font-size:19px; letter-spacing:-.4px; margin:9px 0; }
+.comparison-heading h3 svg { flex-shrink:0; color:var(--mint); }
+.feature-badge { color:#c0e9b5; border:1px solid #47613f; border-radius:5px; padding:4px 7px; font:10px var(--mono); }
+.comparison-controls { display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin:18px 0; }
+.comparison-controls>label:not(.checkbox-label) { flex:0 1 210px; }
+.checkbox-label { display:flex; align-items:center; gap:9px; font-size:12px; color:#cfdae8; cursor:pointer; }
+.checkbox-label input { accent-color:var(--mint); width:16px; height:16px; margin:0; }
+.diff-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:18px 0; }
+.diff-summary>div { border:1px solid #303b4d; border-radius:8px; background:#111a27; padding:13px 15px; }
+.diff-summary dt { font-size:11px; color:#bdc9d9; }
+.diff-summary dd { font:24px var(--mono); margin:7px 0 0; }
+.diff-changed { color:#f0d59b; }
+.diff-added { color:#c0edb3; }
+.diff-removed { color:#eebcc5; }
+.diff-unchanged { color:#bfcce1; }
+.diff-label { display:inline-block; padding:4px 7px; font-size:10px; border:1px solid currentColor; border-radius:5px; white-space:nowrap; }
+.sequence-table { table-layout:fixed; min-width:660px; }
+.sequence-table th:first-child { width:105px; }
+.sequence-table th:last-child { width:150px; }
+.sequence-table td { vertical-align:top; }
+.compare-event-link { width:100%; display:block; text-align:left; background:#182234; border:1px solid #37465e; padding:10px; min-width:0; }
+.compare-event-link strong { display:block; font-size:11px; color:#d7e4f5; overflow-wrap:anywhere; }
+.compare-event-link small { display:block; color:#aebed5; font:9px var(--mono); margin-top:6px; line-height:1.7; }
+.changed-fields { font-size:10px; color:#bfcbde; }
+.changed-fields>span { display:inline-block; padding:2px 6px; margin:0 4px 5px 0; background:#302a20; color:#efd4a3; border-radius:4px; font-size:10px; }
+.comparison-limit, .comparison-empty { margin:18px 0 0; padding:16px; border:1px solid #655537; border-radius:8px; font-size:12px; line-height:1.8; background:#221f19; }
+.comparison-empty { color:#becadd; border-color:#354157; background:#111b2a; }
+.export-metadata { margin-top:14px; border:1px solid #354358; border-radius:8px; padding:14px; background:#101b27; }
+.export-metadata label { display:flex; align-items:center; gap:10px; margin:9px 0; font-size:12px; color:#d1e0f0; }
+.export-metadata input { accent-color:var(--mint); }
+.export-metadata p { color:#b7c6d9; font-size:11px; line-height:1.7; }
+@media(max-width:700px) {
+  .focus-filters { padding:12px; gap:9px; }
+  .focus-filters label { flex-basis:calc(50% - 9px); }
+  .focus-filters input { max-width:none; }
+  .comparison-heading h3 { font-size:16px; }
+  .diff-summary { gap:7px; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .diff-summary>div { padding:11px; }
+  .import-progress { align-items:flex-start; font-size:10px; }
+  .comparison-controls { gap:13px; }
+  .comparison-controls>label:not(.checkbox-label) { flex-basis:160px; }
+}

@@ -16,6 +16,7 @@ coverage/
 playwright-report/
 test-results/
 release/
+release-assets/
 .env
 .env.*
 !.env.example

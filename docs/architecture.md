@@ -9,13 +9,15 @@ React + TypeScript provide the UI; Vite builds relative-path static assets (`bas
 | Stage | Implementation | Responsibility |
 | --- | --- | --- |
 | File selection and session state | [App](../src/App.tsx), [import hook](../src/components/useTraceImport.ts) | Explicit selection/drop, session caps, busy lock, generation-based cancellation, in-memory traces |
-| Background import | [worker](../src/components/import.worker.ts) | Receive a `File`, read text, call `parseTrace`, return normalized data or generic error; no source logging |
+| Background import | [worker](../src/components/import.worker.ts), [task lifecycle](../src/core/import-task.ts) | Read/parse in inline worker; AbortSignal, deadline and one-shot cleanup; no source logging |
 | Decode/dispatch | [import](../src/core/import.ts), [registry](../src/core/registry.ts) | UTF-8 size/depth/record checks, JSON then JSONL, auto-discovery, first matching adapter |
 | Normalize/validate | [adapters](../src/adapters), [helpers](../src/core/helpers.ts), [types](../src/core/types.ts) | Source-specific mapping into `Trace` / `TraceEvent` / `Usage`, common runtime schema |
-| Analyze/render | [analysis](../src/core/analysis.ts), [timeline](../src/components/Timeline.tsx), [comparison](../src/components/Compare.tsx) | Pure recorded statistics/findings; UI search, selection, pagination, descriptive deltas |
+| Analyze/render | [analysis](../src/core/analysis.ts), [query](../src/core/query.ts), [sequence comparison](../src/core/compare.ts), [timeline](../src/components/Timeline.tsx), [comparison UI](../src/components/Compare.tsx) | Pure statistics/findings and filters, bounded jsdiff alignment, selection/pagination, descriptive deltas |
 | Transform/download | [export](../src/core/export.ts), [dialog](../src/components/ExportDialog.tsx) | `redactTrace`, `exportTraceJson`, `exportTraceHtml`, local Blob downloads and URL cleanup |
 
-Files are imported one at a time with a fresh module worker for each file; workers terminate on completion, clear, or unmount. A generation token prevents late results from repopulating a cleared workspace. Imported session IDs become local random IDs. This is whole-file parsing, not incremental streaming. There is no worker timeout or guaranteed memory ceiling: input copies, normalization, main-thread analysis, and exports also consume memory.
+Files are imported one at a time with a fresh inline module worker for each file; workers terminate on completion, errors, explicit cancellation, clear, unmount or a 30-second per-file deadline. Browser timer throttling can delay enforcement. The task removes message/error/abort handlers and its timer exactly once. A generation token prevents late results from repopulating a cleared/cancelled workspace. Cancel discards all uncommitted results in the pending batch but preserves existing sessions; clear removes those too. Progress is file ordinal, not fabricated bytes/percent. Imported session IDs become local random IDs.
+
+This is whole-file parsing, not incremental streaming. There is no guaranteed memory ceiling: input copies, normalization, main-thread analysis, comparison and exports also consume memory. The browser is still trusted to run scheduled cancellation callbacks.
 
 ## Add an adapter without editing the dispatcher
 
@@ -36,9 +38,10 @@ Core functions are internal source APIs, not a promised semver-stable library in
 | Selection | ≤5 files; ≤20 MiB per file; reject oversize selections before reading |
 | Workspace | ≤10 sessions including the two demos |
 | Parser | ≤20,000 input records; ≤20,000 events; nesting ≤60 |
-| Timeline | 100 rows/page; 50,000 detail characters across fields |
+| Import lifetime | 30 seconds per file; cancel entire pending batch without dropping prior sessions |
+| Timeline | 100 rows/page; 50,000 detail characters across fields; AND-combined literal/kind/status/duration filters |
 | Export preview | 50,000 displayed characters; full transformed download |
-| Comparison | First 100 sorted tool names shown |
+| Comparison | First 100 sorted tool names; sequence: 2,000 selected events/side, 400 edits, 200 ms alignment budget, 50 rows/page |
 
 Web Workers are required for UI imports; no synchronous fallback is provided. A worker protects responsiveness during parsing, not during all analysis/search/export work. Caps are guardrails, not measured capacity guarantees across browsers.
 
@@ -48,9 +51,19 @@ Web Workers are required for UI imports; no synchronous fallback is provided. A 
 
 `getStats` uses reported usage and timestamp endpoints; `getToolBreakdown` sums observed durations, which can overlap. Comparison is B − A for recorded values, not experimental control, statistical inference, scoring, or cost estimation. The built-in [demo generator](../src/demo.ts) manufactures sequences, token counts, and timings; its “optimized” label is illustrative only.
 
+## V0.2 event comparison and sharing policy
+
+`filterEvents` is a pure stable filter/sort, with missing durations last in longest-first order; minimum zero is different from no minimum. The timeline returns focus to search on reset and to the originating row (or search if unavailable) on inspector close.
+
+`compareEvents` uses jsdiff `diffArrays` with exact JSON-encoded `(kind, name)` keys. Aligned events compare content/input/output/status/model/duration/usage; original IDs, parent links and absolute timestamps are not cross-run identities. Repeated names can align ambiguously. Exceeded size/edit/time bounds return an explicit unavailable state, never a partial diff. Work still occurs on the UI thread; the budget is a guardrail, not a strict latency guarantee.
+
+The export functions accept an optional third `ExportOptions` argument, with `omitTiming` and `omitUsage`. True flags are valid only for structure mode; pattern mode plus minimization throws. The existing strict allowlist removes original text and unknown fields; omitted metrics are absent, never zero. The dialog shares options/serialization across preview and downloads. Native schema stays 1. See [field contracts and research](v0.2-design.md) and [privacy](privacy.md).
+
 ## Tests and deployment
 
-Core Vitest tests reside alongside core modules. [Playwright configuration](../playwright.config.ts) targets desktop Chromium and Pixel 7 emulation using the production preview server. [CI](../.github/workflows/ci.yml) runs checks and E2E; [Pages](../.github/workflows/pages.yml) independently gates a manual default-branch deployment on those checks, publishes the resulting build directory, and runs a separate Playwright smoke job against the deployed public URL.
+Core Vitest tests reside alongside core modules. [Playwright configuration](../playwright.config.ts) targets desktop Chromium and Pixel 7 emulation using the production preview server. `check` also typechecks browser tests. [CI](../.github/workflows/ci.yml) runs checks and E2E; [Pages](../.github/workflows/pages.yml) independently gates a manual default-branch deployment and runs smoke against the actual public URL, including a version marker and V0.2 controls. The separate [manual Release workflow](../.github/workflows/release.yml) validates, packages a static archive with licenses/checksums, then grants contents-write only to a publication job that does not execute checked-out project code. Existing tags are never overwritten.
+
+V0.2 local candidate checks: 225 unit tests pass; 64 browser cases are defined, awaiting candidate CI. See [verification](verification.md) for updated V0.2 evidence; the following V0.1 results are historical only.
 
 The [v0.1.0 release](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`. [CI run 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) passed with 107 unit tests and 36 desktop Chromium / Pixel 7 emulation browser tests. Recorded core/adapters line coverage is 96.58%, not UI coverage. Local browser downloads remain blocked by an enterprise firewall.
 

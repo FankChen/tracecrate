@@ -1,5 +1,14 @@
 # Verification record
 
+## V0.2 candidate · 2026-09-13
+
+- Research baseline: clean `1c92be40abb75114033ba2624e386e55e51f42e2`, synchronized with main; original 107 unit tests, lint, TypeScript and production build reproduced successfully before changes.
+- Candidate `bf3a2da308eb0f900b91eae5b1a3ff6a4a8ca863`: 225 unit tests, lint, application/browser TypeScript checks and production build passed locally on Node 24.21.0. Core/adapters coverage: **97.51% lines (589/604), 95.62% statements, 91.67% branches**; not React UI coverage. Machine-readable summary includes query/comparison/import-task modules.
+- `npm audit` (including development dependencies) reported zero known vulnerabilities at verification time. This is not a security audit or guarantee.
+- First candidate [CI 34747381885](https://github.com/FankChen/tracecrate/actions/runs/34747381885): **62/64 browser cases passed**, with only the keyboard modal-boundary test failing in both projects. Shift+Tab from the first modal button did not return to the last button in Chromium 153.0.8010.12 on Ubuntu. Explicit first/last focus wrapping was added; the original assertions remain. A new pass is required before release. Local Chromium is missing and enterprise download restrictions are not bypassed.
+- Release packaging smoke succeeded with only static assets, synthetic demo data, build/deploy metadata, application license and runtime dependency notices. Local dirty-checkout packages are development smoke artifacts, **not published releases**; publication packages must use a clean tested revision and include SHA-256 checksums.
+- No V0.2 release or Pages pass is claimed yet. These statuses will be replaced with actual execution results; V0.1 evidence below is historical only.
+
 ## v0.1.0 released · 2026-09-10
 
 - [Release v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was actually created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`.

@@ -6,11 +6,11 @@
 [![Pages](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml)
 [![Release v0.1.0](https://img.shields.io/badge/release-v0.1.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)
 
-[English](README.md) · [格式说明](docs/formats.md) · [隐私边界](docs/privacy.md) · [参与贡献](CONTRIBUTING.md)
+[English](README.md) · [V0.2 调研与设计](docs/v0.2-design.md) · [格式说明](docs/formats.md) · [隐私边界](docs/privacy.md) · [参与贡献](CONTRIBUTING.md)
 
 ![TraceCrate 合成示例实际截图：线上站点的已记录指标、时间线和选中的工具事件。](docs/screenshots/tracecrate-desktop.png)
 
-*线上站点实际截图，已目视检查；1440 × 2026 整页。事件与数值均为合成示例，不是性能评测结果。*
+*历史 v0.1 线上实际截图，已目视检查；1440 × 2026 整页。事件与数值均为合成示例，不是性能评测结果；V0.2 新增控件未包含在此旧图中。*
 
 TraceCrate 把你主动选择的 trace 文件变成可搜索的时间线、统计、启发式诊断和双会话对比。**无后端、无遥测、无账号、无需 API key**；不会运行 agent，也不会执行日志里的命令。
 
@@ -37,12 +37,20 @@ npm run dev
 
 ## 已有能力
 
-- 时间线按记录顺序展示；支持搜索、类型筛选、相对时间、工具输入/输出及元数据，每页 100 个事件。
+- 时间线支持文本／ID／模型搜索，事件类型、状态与最短耗时联合筛选，按记录顺序或最长耗时排序；每页 100 个事件，缺失耗时不当作零。
 - 展示记录的 token、明确错误与可用的耗时；缺失值保持未知，不估算费用。
 - 启发式提示工具错误、长耗时、大输出、相同工具名与输入重复；不证明重试意图或根因。
-- 双会话对比指标与工具调用次数，差值为 B − A。**描述性对比，不是受控实验。**
-- 默认严格「仅结构」导出，也可选择尽力而为的模式脱敏；HTML 无脚本、无外部资源，原生 JSON 可重新导入。
-- 文件读取与解析在 Web Worker 中进行，会话只保存在内存；清空会终止导入。刷新后导入会话消失、恢复合成示例；已下载文件不会删除。
+- 双会话对比指标、工具调用次数及逐事件序列，差值为 B − A；展示变化字段，可筛选工具／差异并跳回任一侧原始事件。重复名称可能有对齐歧义。**描述性对比，不是受控实验或执行身份判定。**
+- 默认严格「仅结构」导出，新增可选移除时间／token 元数据；预览、JSON、HTML 使用相同策略，移除值保持未知而非零。模式脱敏仍是独立的尽力而为选项；HTML 无脚本、无外部资源，原生 JSON 可重新导入。
+- Web Worker 顺序读取解析，显示当前文件序号，30 秒单文件期限，可独立取消且保留已有会话；取消丢弃当前批次，清空移除整个工作区。会话仍仅在内存中，已下载文件不删除。
+
+### 第二版操作路径
+
+1. **Timeline** 选择 **Reported error** 或设置 **Min duration (ms)**，再选 **Longest first**；设置最短耗时后，未知耗时事件被排除，即使下限为零。
+2. **Compare → Event-by-event comparison** 查看变化字段，选择 **Tools only** 缩小范围，点击任一侧事件返回原会话及正确分页。
+3. **Export report → Structure only** 可选 **Omit timing metadata / Omit token usage**，预览后检查完整下载。切到模式脱敏会清除这两个选项，因为保留文本中仍可能存在相同元数据。
+
+参见[官方资料与设计取舍](docs/v0.2-design.md)、[第二版说明](docs/releases/v0.2.0.md)及[键盘操作路径](docs/keyboard.md)。
 
 ## 格式与限制
 
@@ -50,27 +58,29 @@ npm run dev
 | --- | --- | --- |
 | Claude Code | 正常消息 JSONL、文本、工具调用/结果、部分系统记录 | 增量流式 delta；不保证所有私人历史版本兼容 |
 | Codex | rollout JSONL 的 `session_meta`、`turn_context`、`response_item` 和部分 `event_msg` | 任意 `codex exec --json` 输出、推理块和流式 delta |
-| OTLP JSON | `resourceSpans/scopeSpans/spans` 与部分 GenAI 属性 | protobuf、接收端服务、完整 OTLP、MCP transcript |
+| OTLP JSON | `resourceSpans/scopeSpans/spans`、嵌套结构属性及新旧缓存写入字段 | protobuf、接收端服务、完整 OTLP、MCP transcript |
 | TraceCrate 原生 | 单份 `schemaVersion: 1` JSON | 未知字段被移除；分享导出不是原始备份 |
 
 [详细格式、合成样例及官方公开参考](docs/formats.md)。`Usage.input` **已包含** `cacheRead` / `cacheWrite`，缓存是子计数，不可再次相加；总 token 为 input + output。
 
-每文件最大 20 MiB UTF-8，输入记录及归一化事件各最多 20,000，嵌套深度最多 60；一次最多选择 5 个文件，内存最多 10 个会话（包含示例）。要求浏览器支持 Web Worker；整文件读取，不是流式导入。分析和导出仍在主线程进行。详情与导出预览最多展示 50,000 字符，完整下载不受此展示限制。[架构说明](docs/architecture.md)。
+每文件最大 20 MiB UTF-8，输入记录及归一化事件各最多 20,000，深度最多 60；一次最多 5 文件，内存最多 10 会话（包含示例）。导入期限为每文件 30 秒，后台计时节流可能延迟执行。要求 Web Worker；整文件读取，不是流式导入。序列比较每侧最多 2,000 个所选事件、400 次编辑距离、200 ms 对齐预算；超限明确提示而非展示不完整差异。分析、比较和导出仍在主线程。详情与预览最多显示 50,000 字符，完整下载不限于此。[架构说明](docs/architecture.md)。
 
 ## 隐私不是绝对保证
 
 应用本身不上传 trace、不发送遥测；浏览器扩展、受损设备或被修改的托管页面仍可能读取数据。静态站点托管方仍会收到 IP、User-Agent 等普通请求元数据。
 
-默认「仅结构」通过严格允许列表移除任意自由文本、原始标识、名称、模型名和输入/输出，但保留事件关系、状态、token 数量和时间信息；**这些也可能敏感**。「模式脱敏」保留文本，可能漏掉秘密。两种方式都不保证匿名化；预览可能截断，必须检查完整下载。清空内存不等于安全擦除。[隐私说明](docs/privacy.md) · [安全报告](SECURITY.md)。
+默认「仅结构」通过严格允许列表移除自由文本、原始标识、名称、模型及输入/输出。时间与 token 默认保留、现可选择移除；事件顺序、数量、映射后的关系及状态仍保留，**也可能敏感**。「模式脱敏」保留文本，可能漏掉秘密。两种方式都不保证匿名化；预览可能截断，必须检查完整下载。清空内存不等于安全擦除。[隐私说明](docs/privacy.md) · [安全报告](SECURITY.md)。
 
 ## 开发与发布状态
 
-`npm run check` 包括 lint、单元测试和构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。
+`npm run check` 包括 lint、单元测试、浏览器测试类型检查及构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。`npm run package:release` 将已测试构建打包，附许可证与 SHA-256 校验和。
+
+**V0.2 候选 · 2026-09-13：** 本地 225 项单元测试、lint、应用／浏览器 TypeScript 检查与构建通过；核心及适配器行覆盖率 97.51%（不含 UI）。已收集 64 项浏览器用例；本次文档提交时 V0.2 浏览器、Pages 与 release 验证仍待完成。[验收记录](docs/verification.md)明确区分候选结果和以下历史结果。
 
 **已验证发布 · 2026-09-10：** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) 已在测试提交 `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715` 上创建。[CI 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) 通过 lint、TypeScript/构建、**107 项单元测试及 36 项桌面 Chromium / Pixel 7 模拟浏览器测试**。已记录核心及适配器代码行覆盖率 **96.58%（不含 UI）**。
 
 **线上验证：** [Pages 34462098830](https://github.com/FankChen/tracecrate/actions/runs/34462098830) 的构建、部署及实际公网 Playwright smoke 均成功：项目子路径资源、页面加载后切换离线且此前未导入时首次导入合成 Claude fixture、默认仅结构 HTML 下载，以及无 console/page 错误。上方截图来自该运行已下载的证据产物，详见[验收记录](docs/verification.md)。本地浏览器下载仍受限；不声称通过 Firefox/WebKit 或屏幕阅读器认证。社区发布帖和操作视频仍**未发布**。
 
-[CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署：用户先在 Pages 选择 GitHub Actions，再手动运行。[发布清单](docs/release.md) · [开放贡献任务与路线图](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
+[CI](.github/workflows/ci.yml) 使用 Node 24。[Pages](.github/workflows/pages.yml) 仅允许默认分支手动部署。[Release](.github/workflows/release.yml) 同样只允许默认分支手动触发，重新检查、审计并运行浏览器测试后才打包和发布，拒绝替换已有标签。[发布清单](docs/release.md) · [开放贡献任务与路线图](docs/roadmap.md) · [自然传播计划与中英文草稿](docs/launch-plan.md) · [更新记录](CHANGELOG.md)。
 
 TraceCrate 是原创项目，与 Anthropic、OpenAI、OpenTelemetry 无隶属或背书关系。[MIT 许可证](LICENSE)，copyright 2026 TraceCrate contributors。

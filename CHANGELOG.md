@@ -4,8 +4,18 @@ Published releases receive dated version headings; later documentation updates a
 
 ## Unreleased
 
+- V0.2 candidate: status/minimum-duration filters, stable longest-first ordering, metadata search and keyboard focus return.
+- Bounded event-sequence comparison with changed fields, scope/filter controls, pagination and original-event navigation.
+- Optional structure-only timing/token metadata minimization with preview/JSON/HTML agreement and schema-1 compatibility. Missing tool durations now remain unknown.
+- Independent import cancellation, ordinal progress, per-file deadline and stale-result cleanup.
+- Structured OTLP attributes, strict integer decoding and current cache-write alias with legacy fallback.
+- 225 synthetic unit tests, 64 configured browser cases, browser-test typechecking, and manual validated-release packaging with licenses/checksums. Browser/Pages/release evidence is pending at this candidate revision.
+- [Research and V0.2 design](docs/v0.2-design.md), [release notes](docs/releases/v0.2.0.md) and [keyboard walkthrough](docs/keyboard.md).
+
+### V0.1 documentation follow-up
+
 - Documentation follow-up: replace both README illustrations with the visually reviewed [live-site synthetic demo screenshot](docs/screenshots/tracecrate-desktop.png); add release/Pages badges and current evidence links.
-- Synchronize release, verification, architecture, security, and launch-draft status. The [roadmap](docs/roadmap.md) links open contribution issues #4, #5, and #6; those proposals are not implemented features.
+- Synchronize release, verification, architecture, security, and launch-draft status. The [roadmap](docs/roadmap.md) links contribution issues #4, #5, and #6; #5/#6 are addressed in the V0.2 candidate, while #4 remains a proposal.
 
 ## [0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) — 2026-09-10
 

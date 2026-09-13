@@ -63,4 +63,15 @@ The workflow has only `workflow_dispatch`: no push/PR deployment and no release 
 
 ## 5. Publish subsequent releases
 
-[v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) already exists. For the next release, rerun checks for the intended revision, review release contents, and move only the included unreleased changes into accurate dated notes. Create the release explicitly; no automatic tag, package publish, or release workflow is provided. Keep test limitations and known format gaps in the notes. Only link a release after it exists. Announce one useful workflow, not first/best claims, performance gains from synthetic comparisons, or star-count predictions.
+[v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) already exists. V0.2 adds a separate [manual Release workflow](../.github/workflows/release.yml):
+
+1. Review the candidate on a branch; require its CI before a fast-forward/normal reviewed merge to the default branch. Confirm the package/lock version and version marker agree, and the matching versioned notes exist under the releases documentation directory.
+2. Run **Actions → Release → Run workflow**, explicitly on the default branch. No push, PR or tag event automatically publishes a release.
+3. Its read-only validation job runs locked installation, lint, 225 current unit tests, application/browser typechecking, build, coverage, dependency audit and 64 current Chromium desktop/mobile tests. Failures block publication; test counts may change in later releases.
+4. The packaging script copies only the already-built static site, app license and runtime dependency licenses, then adds version/source/dirty-checkout metadata and static deployment instructions. CI refuses a dirty working tree. It creates a tarball and SHA-256 checksum; source archives are separately provided by GitHub.
+5. A separate `contents: write` job downloads the artifact, verifies its checksum and uses the built-in short-lived GitHub token to create the tag at the tested SHA and publish assets. This job does not check out or execute application source. Existing tags are rejected, never force-moved or overwritten.
+6. Record the actual release URL, tag SHA, validation run, asset names/checksums and Pages evidence in the verification record. Download and verify release assets independently. Pages remains separately dispatched; publishing a release does not deploy the site.
+
+Build artifacts contain synthetic examples only. Local dirty-checkout packaging is a smoke test, not release evidence. Run the packaged site through an approved static server; direct file-URL loading is not supported. No npm publish, offline installation promise or reproducible-byte-for-byte build claim is made. Preserve third-party notices when redistributing.
+
+Keep test limitations and known format gaps in the notes. Only link a release after it exists. Announce one useful workflow, not first/best claims, performance gains from synthetic comparisons, or star-count predictions.

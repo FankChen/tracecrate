@@ -6,7 +6,7 @@
 
 The current application has no backend, trace-upload API, analytics/telemetry integration, account system, or API-key requirement. File selection/drop is explicit. It does not crawl Claude/Codex storage, read arbitrary directories, call models, execute commands, or follow links inside trace content. Text is rendered as text, not interpreted as HTML/code.
 
-The import hook sends selected `File` objects to a Web Worker bundled inline with the app. No separate worker HTTP request is needed on the first import after loading the app. Reading and parsing happen there; normalized traces return to React state. Imports are sequential and sessions are memory-only, with no app persistence in localStorage/IndexedDB. **Clear sessions** terminates pending workers and drops session state; reload drops imports and loads fresh synthetic demos. This is not secure memory erasure, protection against OS swap/crash dumps, or deletion of the selected original/downloads.
+The import hook sends selected `File` objects to a Web Worker bundled inline with the app. No separate worker HTTP request is needed on the first import after loading the app. Reading and parsing happen there; normalized traces return to React state. Imports are sequential and sessions are memory-only, with no app persistence in localStorage/IndexedDB. **Cancel import** terminates the pending worker and discards the uncommitted batch while keeping previously loaded sessions. **Clear sessions** also drops those sessions; reload restores fresh synthetic demos. A 30-second per-file deadline is enforced by a browser timer, which may be delayed in background tabs. Neither cancellation nor clear is secure memory erasure, protection against OS swap/crash dumps, or deletion of originals/downloads.
 
 ## What “no uploads” does not cover
 
@@ -28,11 +28,21 @@ Implementation: [sharing transforms](../src/core/export.ts) and [export dialog](
 | Trace name/source | Fixed generic labels | Fixed generic labels |
 | Event names, model, original warnings | Generic names; model removed; fixed warning | Scrubbed but otherwise preserved |
 | Event kind/status, count, relationships | Retained | Retained |
-| Timestamps, durations, usage, demo flag | Retained when allowed | Retained |
+| Timestamps and durations | Retained by default; optionally omitted from every event | Retained; minimization is unavailable |
+| Token usage | Retained by default; optionally omitted from trace and all events | Retained; minimization is unavailable |
+| Demo flag | Retained when present | Retained |
 
 **Strict structure-only removes arbitrary free text, but metrics/timing/relationships can still reveal business activity, workloads, working hours, or identifiable patterns.** This is data minimization, not guaranteed anonymity. Removing names also means exported tool breakdowns no longer retain original tool grouping.
 
 Pattern mode recognizes selected secret assignments/keys, token-like strings, private-key blocks, bearer values, email addresses, and common home-directory paths. It cannot identify all confidential code, prompts, names, URLs, paths, proprietary facts, encodings, or new secret formats. It is not a security guarantee; never treat a pattern-exported real history as an acceptable public test fixture.
+
+### Optional metadata minimization (V0.2)
+
+In structure-only mode, **Omit timing metadata** removes every `timestamp` and `durationMs`; **Omit token usage** removes `usage` from both the trace and all events. Both are off by default and can be combined. Omitted values are absent in JSON and shown as Unknown in derived HTML summaries, never substituted with zero. An original recorded zero remains zero when retained.
+
+The preview and both downloads use the same policy. The preview may still truncate. Switching to pattern mode clears these options because preserved free text can contain the same timing/count information; internal export functions reject patterns plus minimization rather than make a misleading promise. Closing the dialog resets the entire policy and preview.
+
+Counts, kinds, statuses, order, generic names/IDs, remapped known relationships and the demo flag remain. These can still identify a workload or reveal sensitive activity. Unknown properties and original warnings are removed by the structure allowlist, not selectively searched for numeric metadata. See the [field-by-field design](v0.2-design.md#minimize-sharing-metadata).
 
 JSON is a transformed native report, not a raw backup. HTML is generated from the transformed trace with escaped fields, no scripts/external assets, and a restrictive embedded CSP. This reduces active-content risk, not information-disclosure risk. Download generation occurs on the main thread; large files may be slow. The transform leaves the original in-memory trace unchanged.
 
@@ -40,8 +50,8 @@ JSON is a transformed native report, not a raw backup. HTML is generated from th
 
 1. Prefer a newly authored synthetic reproduction whenever possible.
 2. Choose structure-only unless you have an explicit reason and authorization to disclose text.
-3. Inspect the preview, then the **entire downloaded file**: preview display stops at 50,000 characters but the download contains the full transformed report.
-4. Review metrics, timestamps, statuses, relationships, and all text. If remaining metadata is sensitive, do not share; neither mode removes all metadata.
+3. If timing or token counts are unnecessary, opt to omit them in structure-only mode. Inspect the preview, then the **entire downloaded file**: preview display stops at 50,000 characters but the download contains the full transformed report.
+4. Review all retained metrics, timestamps, statuses, relationships, and text. If remaining metadata is sensitive, do not share; neither mode removes all metadata.
 5. Share only with the intended recipients through an approved channel. Remove local downloads/backups according to your own retention policy.
 
 No compliance certification, independent security audit, or guaranteed redaction coverage is claimed.

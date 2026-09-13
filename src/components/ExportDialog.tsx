@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { AlertTriangle, Braces, Download, FileCode2, ShieldCheck, X } from 'lucide-react';
 import { exportTraceHtml, exportTraceJson } from '../core/export';
 import type { ExportOptions, RedactionMode } from '../core/export';
@@ -46,7 +46,19 @@ export default function ExportDialog({ trace, onClose }: { trace: Trace; onClose
       setStatus(`${format.toUpperCase()} report prepared using ${mode === 'structure' ? 'structure-only' : 'pattern'} redaction. Review before sharing.`);
     } catch { setStatus('The report could not be prepared. No original trace was exported.'); }
   };
-  return <dialog className="export-dialog" ref={dialog} aria-labelledby="export-title" aria-describedby="export-description" onCancel={(event) => { event.preventDefault(); onClose(); }}>
+  const wrapFocus = (event: KeyboardEvent<HTMLDialogElement>) => {
+    if (event.key !== 'Tab') return;
+    // Native modal inertness prevents background interaction, but Chromium can
+    // move focus to browser chrome at a boundary. Keep the APG first/last loop.
+    const stops = Array.from(event.currentTarget.querySelectorAll<HTMLElement>(
+      'button:enabled, input:enabled, select:enabled, textarea:enabled, a[href], [tabindex="0"]',
+    )).filter((element) => element.tabIndex >= 0 && element.getClientRects().length > 0);
+    const first = stops[0];
+    const last = stops.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+  };
+  return <dialog className="export-dialog" ref={dialog} aria-labelledby="export-title" aria-describedby="export-description" onKeyDown={wrapFocus} onCancel={(event) => { event.preventDefault(); onClose(); }}>
     <header className="dialog-header"><span className="export-symbol"><ShieldCheck size={22} aria-hidden="true" /></span><button type="button" className="icon-button" aria-label="Close export report" onClick={onClose}><X size={20} /></button></header><h2 id="export-title">Export report</h2><p id="export-description" className="muted">Share the sequence. Be deliberate about the details.</p>
     <fieldset><legend>What should the report contain?</legend><label className={`export-option ${mode === 'structure' ? 'active' : ''}`}><input type="radio" name="redaction" value="structure" checked={mode === 'structure'} onChange={() => { setMode('structure'); setStatus(''); }} /><span><strong>Structure only <span className="recommended">Default</span></strong><span>Remove content, inputs, outputs, and identifying names. Keep event structure and recorded metrics unless omitted below.</span></span></label><label className={`export-option ${mode === 'patterns' ? 'active' : ''}`}><input type="radio" name="redaction" value="patterns" checked={mode === 'patterns'} onChange={() => { setMode('patterns'); setOmitTiming(false); setOmitUsage(false); setStatus(''); }} /><span><strong>Pattern redaction</strong><span>Preserve text with best-effort removal of recognized secrets and personal data.</span></span></label></fieldset>
     {mode === 'structure' ? <fieldset className="export-metadata" aria-describedby="export-metadata-description"><legend>Optional metadata minimization</legend>

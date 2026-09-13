@@ -39,7 +39,7 @@ Public context: [Codex CLI reference](https://developers.openai.com/codex/cli/re
 
 [Adapter](../src/adapters/otlp.adapter.ts) · [Synthetic example](../examples/otlp.json)
 
-Reads `resourceSpans[].scopeSpans[].spans[]`. Requires a span name and `spanId`; `parentSpanId` is retained. Resource attributes are combined with span attributes (span values win). Simple string/bool/int/double and array attribute values are decoded; arbitrary key-value-list structures, span events/links, metrics/logs, and transport semantics are not implemented.
+Reads `resourceSpans[].scopeSpans[].spans[]`. Requires a span name and `spanId`; `parentSpanId` is retained. Resource attributes are combined with valid span attributes (span values win). String/bool/int/double, recursive `arrayValue.values` and `kvlistValue.values` attributes are decoded into inert JSON text, using null-prototype maps. Integer strings/numbers must represent safe integers; null, booleans, blank strings, fractions and unsafe values are rejected as integer attributes. Unsupported values (including bytes) and unsupported array elements are omitted, not replaced with fabricated nulls; this remains partial ingestion. Span events/links, metrics/logs and transport semantics are not implemented.
 
 Selected mappings:
 
@@ -47,15 +47,17 @@ Selected mappings:
 | --- | --- |
 | Tool classification | `gen_ai.tool.name`, `gen_ai.tool.call.id`, or `gen_ai.operation.name = execute_tool` |
 | Model | `gen_ai.response.model`, falling back to `gen_ai.request.model` |
-| Usage | `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`, `gen_ai.usage.cache_read.input_tokens`, `gen_ai.usage.cache_creation.input_tokens` |
+| Usage | `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`, `gen_ai.usage.cache_read.input_tokens`, `gen_ai.usage.cache_write.input_tokens` (legacy `gen_ai.usage.cache_creation.input_tokens` fallback) |
 | Input | `gen_ai.tool.call.arguments`, `gen_ai.tool.input`, `gen_ai.input.messages`, `gen_ai.prompt` (in precedence order) |
 | Output | `gen_ai.tool.call.result`, `gen_ai.tool.output`, `gen_ai.output.messages`, `gen_ai.completion` (in precedence order) |
 
 Use decimal strings for nanosecond timestamps. Unsafe JSON numbers are omitted with warnings. Nanosecond differences use `BigInt` before conversion to milliseconds; invalid/reversed intervals have no fabricated duration. OTLP status 1/2 maps to OK/error (the adapter also tolerates named status strings); unset is unknown.
 
+The current cache-write key takes precedence even when explicitly zero; aliases are never added together. Conflicting valid values emit a generic notice without source content. Negative general integer attributes are retained as data, but negative usage is not a valid count. V0.2 synthetic cases are in [OTLP compatibility tests](../src/core/otlp-v2.test.ts).
+
 Span usage is summed as supplied, not treated as a last snapshot. Counters must be **per-operation, not cumulative**, with no duplicate parent/child rollups of the same usage; otherwise totals can double count. TraceCrate does not deduplicate by billing scope. Multiple trace IDs in a file become one imported session; when `traceId` is provided, event IDs are `traceId:spanId` and parents use the same trace namespace. Without `traceId`, original span IDs are preserved. Repeated IDs within the same trace are still rejected. No full distributed-trace reconstruction is claimed.
 
-Public references: [OTLP specification and JSON encoding](https://opentelemetry.io/docs/specs/otlp/), [GenAI semantic conventions](https://github.com/open-telemetry/semantic-conventions-genai). GenAI conventions evolve; the supported keys above, including legacy fallbacks, are the implementation boundary—not a claim of complete standards compliance.
+Public references: [OTLP specification and JSON encoding](https://opentelemetry.io/docs/specs/otlp/), [GenAI semantic conventions](https://github.com/open-telemetry/semantic-conventions-genai), [V0.2 pinned GenAI reference](https://github.com/open-telemetry/semantic-conventions-genai/blob/b06f7a2c840ceeacd8478acd3443e697ce390f96/docs/gen-ai/gen-ai-spans.md). GenAI remains Development status as reviewed on 2026-09-13; the supported keys above, including legacy fallbacks, are the implementation boundary—not a claim of complete standards compliance.
 
 ## TraceCrate native schema v1
 
@@ -67,7 +69,9 @@ Kinds: `user`, `assistant`, `tool`, `system`. Statuses: `ok`, `error`, `unknown`
 
 To get a synthetic native sample, export the built-in demo as JSON and reimport it. Both sharing modes yield native reports; they do not preserve the original raw source. Standalone HTML is for reading, not import. Very large generated JSON can exceed the importer size limit even when the original source fit.
 
-Pattern sharing bounds recursive redaction to 60 levels across containers and decoded JSON strings, with a depth preflight before decoding embedded JSON. Over-budget branches are replaced with `[REDACTED]`, never returned as original content. Ordinary text is not truncated by this guard. Pattern matching remains best effort and requires review; structure-only sharing is unchanged.
+V0.2 structure-only metadata minimization removes optional timing/usage fields rather than adding a new schema or filling zeros. V0.1 schema-1 readers can still import these reports. Counts, statuses and remapped known parents remain; unknown external parents are omitted by the sharing transform. Source import behavior remains unchanged.
+
+Pattern sharing bounds recursive redaction to 60 levels across containers and decoded JSON strings, with a depth preflight before decoding embedded JSON. Over-budget branches are replaced with `[REDACTED]`, never returned as original content. Ordinary text is not truncated by this guard. Pattern matching remains best effort and requires review; structure-only defaults remain unchanged.
 
 ## Token and timing semantics
 
@@ -77,4 +81,4 @@ Pattern sharing bounds recursive redaction to 60 levels across containers and de
 - Codex's cumulative input already includes cached input. The last supplied total is authoritative.
 - OTLP input is treated as cache-inclusive and span usage is summed as reported.
 
-Elapsed time is latest known timestamp/end minus earliest recorded timestamp, when enough timing exists. Unanchored durations are not summed into elapsed time. Tool duration sums can overlap and are **not** wall time. Missing values appear as “—”/“Unknown”; TraceCrate does not estimate cost, infer causality, or validate experimental controls.
+Elapsed time is latest known timestamp/end minus earliest recorded timestamp, when enough timing exists. Unanchored durations are not summed into elapsed time. Tool duration sums can overlap and are **not** wall time; sums include known durations only and may be partial. A tool with no recorded durations now shows “—”/“Unknown”, not a fabricated zero. TraceCrate does not estimate cost, infer causality, or validate experimental controls.

@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)
 [![Pages](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml)
-[![Release v0.1.0](https://img.shields.io/badge/release-v0.1.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)
+[![Release v0.2.0](https://img.shields.io/badge/release-v0.2.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0)
 
 [English](README.md) · [V0.2 调研与设计](docs/v0.2-design.md) · [格式说明](docs/formats.md) · [隐私边界](docs/privacy.md) · [参与贡献](CONTRIBUTING.md)
 
@@ -14,7 +14,7 @@
 
 TraceCrate 把你主动选择的 trace 文件变成可搜索的时间线、统计、启发式诊断和双会话对比。**无后端、无遥测、无账号、无需 API key**；不会运行 agent，也不会执行日志里的命令。
 
-**[打开在线演示](https://fankchen.github.io/tracecrate/)** · **[v0.1.0 正式发布](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)** · **[参与贡献](CONTRIBUTING.md)** · [GitHub 源码](https://github.com/FankChen/tracecrate)。无需安装即可探索合成示例，也可按下方说明本地运行。
+**[打开在线演示](https://fankchen.github.io/tracecrate/)** · **[v0.2.0 正式发布与下载](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0)** · **[参与贡献](CONTRIBUTING.md)** · [GitHub 源码](https://github.com/FankChen/tracecrate)。无需安装即可探索合成示例，也可按下方说明本地运行。
 
 ## 30 秒体验
 
@@ -75,7 +75,7 @@ npm run dev
 
 `npm run check` 包括 lint、单元测试、浏览器测试类型检查及构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。`npm run package:release` 将已测试构建打包，附许可证与 SHA-256 校验和。
 
-**V0.2 已验证 · 2026-09-13：** [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077) 与 [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) 在 `a95b96c1459b7454f88e5efb4d76af780ed1c661` 成功：**225 项单元测试、全部 64 项浏览器测试**、lint、应用／浏览器 TypeScript 检查和构建通过；核心及适配器行覆盖率 97.51%（不含 UI）。实际公网 V0.2 还通过版本／子路径资源、首次离线导入、新筛选／比较、默认 HTML 与最小化 JSON 下载、预览一致性、零运行时网络请求和无 console 错误检查。已下载并目视审查真实截图。本次文档提交时仅剩 GitHub Release 发布步骤，详见[验收记录](docs/verification.md)。
+**V0.2 已正式发布 · 2026-09-13：** [v0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) 指向 `dc5d92daabe84378d994f09637db317f36b21024`。[发布验收作业](https://github.com/FankChen/tracecrate/actions/runs/34748718079)通过 **225 项单元测试、全部 64 项浏览器测试**、lint、应用／浏览器 TypeScript、构建、覆盖率及依赖审计；核心及适配器行覆盖率 97.51%（不含 UI）。自动发布遇到 HTTP 500，已使用未修改的验收产物恢复草稿并正式发布；整个工作流仍标记失败，不能称为全流程成功。两个公开附件已匿名下载并通过 SHA-256 及原始产物字节比对。[Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675)另行验证托管版本 `a95b96c1459b7454f88e5efb4d76af780ed1c661`，应用资源与发行包一致，包括离线导入、筛选／比较、导出及零运行时网络请求和无 console 错误检查。详见[完整来源与恢复记录](docs/verification.md)。
 
 **历史首版 · 2026-09-10：** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) 在 `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715` 创建；当时的 107 项单元／36 项浏览器测试及 96.58% 核心行覆盖率仅为历史记录，不代替第二版验证。
 

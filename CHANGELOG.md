@@ -4,9 +4,11 @@ Version notes are prepared during release validation; actual publication is reco
 
 ## Unreleased
 
-No additional changes beyond the prepared V0.2 release.
+Publication-record documentation only; no application changes beyond V0.2.
 
-## 0.2.0 — 2026-09-13
+## [0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) — 2026-09-13
+
+Published at tested commit `dc5d92daabe84378d994f09637db317f36b21024`, with independently downloaded and checksum-verified static-site assets. [Release validation](https://github.com/FankChen/tracecrate/actions/runs/34748718079) passed; the automated publication step returned HTTP 500 and was recovered without rebuilding or skipping tests. See [provenance](docs/verification.md).
 
 - Status/minimum-duration filters, stable longest-first ordering, metadata search and keyboard focus return.
 - Bounded event-sequence comparison with changed fields, scope/filter controls, pagination and original-event navigation.
@@ -21,7 +23,7 @@ No additional changes beyond the prepared V0.2 release.
 ### V0.1 documentation follow-up
 
 - Documentation follow-up: replace both README illustrations with the visually reviewed [live-site synthetic demo screenshot](docs/screenshots/tracecrate-desktop.png); add release/Pages badges and current evidence links.
-- Synchronize release, verification, architecture, security, and launch-draft status. The [roadmap](docs/roadmap.md) links contribution issues #4, #5, and #6; #5/#6 are addressed in the V0.2 candidate, while #4 remains a proposal.
+- Synchronize release, verification, architecture, security, and launch-draft status. The [roadmap](docs/roadmap.md) links contribution issues #4, #5, and #6; #5/#6 are addressed in V0.2, while #4 remains a proposal.
 
 ## [0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) — 2026-09-10
 

@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/ci.yml)
 [![Pages](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml/badge.svg)](https://github.com/FankChen/tracecrate/actions/workflows/pages.yml)
-[![Release v0.1.0](https://img.shields.io/badge/release-v0.1.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)
+[![Release v0.2.0](https://img.shields.io/badge/release-v0.2.0-blue)](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0)
 
 [简体中文](README.zh-CN.md) · [V0.2 research & design](docs/v0.2-design.md) · [Format guide](docs/formats.md) · [Privacy](docs/privacy.md) · [Contributing](CONTRIBUTING.md)
 
@@ -14,7 +14,7 @@
 
 TraceCrate turns files you choose into a searchable timeline, recorded metrics, heuristic diagnostics, and side-by-side comparisons. No backend, no telemetry, no accounts, no API keys. It reads traces; it does not run agents or execute recorded commands.
 
-**[Open the live demo](https://fankchen.github.io/tracecrate/)** · **[v0.1.0 release](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0)** · **[Contribute](CONTRIBUTING.md)** · [Source on GitHub](https://github.com/FankChen/tracecrate). Explore synthetic runs without installing anything, or run locally below.
+**[Open the live demo](https://fankchen.github.io/tracecrate/)** · **[v0.2.0 release & downloads](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0)** · **[Contribute](CONTRIBUTING.md)** · [Source on GitHub](https://github.com/FankChen/tracecrate). Explore synthetic runs without installing anything, or run locally below.
 
 ## Try the story in 30 seconds
 
@@ -75,7 +75,7 @@ The app has no trace-upload or telemetry path. That does **not** make every envi
 
 `npm run check` runs lint, unit tests, browser-test typechecking and the production build. `npm run test:e2e` invokes Playwright; browser binaries must be installed separately. `npm run package:release` packages an already-tested build with licenses and SHA-256 checksums. See [contribution checks](CONTRIBUTING.md).
 
-**V0.2 verified · 2026-09-13:** [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077) and [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) passed at `a95b96c1459b7454f88e5efb4d76af780ed1c661`: **225 unit tests and all 64 browser tests**, lint, application/browser TypeScript checks and production build. Core/adapters line coverage is 97.51% (not UI coverage). The actual public V0.2 site also passed version/subpath loading, cold offline import, new filters/comparison, default HTML and minimized JSON downloads, preview agreement and zero runtime network/console errors. Screenshots were downloaded and visually reviewed. GitHub Release publication is the remaining step at this documentation revision; see [verification](docs/verification.md).
+**V0.2 released · 2026-09-13:** [v0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) targets `dc5d92daabe84378d994f09637db317f36b21024`. Its [release validation job](https://github.com/FankChen/tracecrate/actions/runs/34748718079) passed **225 unit tests and all 64 browser tests**, lint, application/browser TypeScript, build, coverage and dependency audit. Core/adapters line coverage is 97.51% (not UI coverage). Publication was recovered from an HTTP 500 using the unchanged validated artifact; the overall workflow remains marked failed, not passed. Both public downloads were independently verified against SHA-256 and the original artifact. [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) separately verified the hosted app at `a95b96c1459b7454f88e5efb4d76af780ed1c661`, with the same application assets: offline import, filters/comparison, exports and zero runtime network/console errors. See [full provenance and recovery details](docs/verification.md).
 
 **Historical first release · 2026-09-10:** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`; its 107 unit / 36 browser tests and 96.58% core/adapters line coverage are historical, not substituted for V0.2 checks.
 

@@ -2,13 +2,13 @@
 
 [Home](../README.md) · [Contributing](../CONTRIBUTING.md)
 
-The V0.2 candidate addresses the implemented items below; further proposals are not delivery commitments. Current behavior is documented in [formats](formats.md), [architecture](architecture.md) and [V0.2 design](v0.2-design.md).
+The [V0.2 release](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) addresses the implemented items below; further proposals are not delivery commitments. Current behavior is documented in [formats](formats.md), [architecture](architecture.md) and [V0.2 design](v0.2-design.md).
 
 ## Open contribution tasks
 
 - [#4 · Versioned synthetic Claude fixture](https://github.com/FankChen/tracecrate/issues/4) — help wanted; agree on one source shape first.
-- [#5 · Keyboard-only walkthrough](https://github.com/FankChen/tracecrate/issues/5) — [documented and verified](keyboard.md) with V0.2 Chromium desktop/mobile keyboard automation; release closure pending, not a manual screen-reader certification.
-- [#6 · Export metadata minimization](https://github.com/FankChen/tracecrate/issues/6) — V0.2 implementation and field contract added; awaiting release verification before closure.
+- [#5 · Keyboard-only walkthrough](https://github.com/FankChen/tracecrate/issues/5) — [documented and verified](keyboard.md), shipped in V0.2 with Chromium desktop/mobile keyboard automation; not a manual screen-reader certification. Issue follow-up remains separate.
+- [#6 · Export metadata minimization](https://github.com/FankChen/tracecrate/issues/6) — implementation and field contract shipped and verified in V0.2. Issue follow-up remains separate.
 
 V0.2 also implements bounded sequence comparison, focused timeline filters, independent import cancellation/deadline, and structured OTLP/cache-write compatibility. These are not claims of persistence, full span trees, billing inference, streaming parsing or universal format support.
 

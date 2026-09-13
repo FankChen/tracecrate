@@ -4,7 +4,7 @@
 
 **Repository:** [FankChen/tracecrate](https://github.com/FankChen/tracecrate). See the [verification record](verification.md) for actual checks and the README for live deployment status. This checklist also applies to future releases; a package version alone is not a published release.
 
-**V0.2 pre-publication checks · 2026-09-13:** 225 unit / 64 browser tests passed in [CI 34747768077](https://github.com/FankChen/tracecrate/actions/runs/34747768077); [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) passed build, deployment and actual V0.2 public smoke. Real screenshots were downloaded and reviewed. The manual Release workflow below must still complete for publication; the next section is historical V0.1 evidence.
+**V0.2 published · 2026-09-13:** [v0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) targets `dc5d92daabe84378d994f09637db317f36b21024`. [Release validation 34748718079](https://github.com/FankChen/tracecrate/actions/runs/34748718079) passed all checks, 225 unit / 64 browser tests, coverage and dependency audit. Automatic publication returned HTTP 500; the matching draft was recovered using the unchanged validation artifact and independently verified public downloads. The overall workflow remains failed. See [complete recovery and asset provenance](verification.md). [Pages 34747767675](https://github.com/FankChen/tracecrate/actions/runs/34747767675) separately passed actual V0.2 public smoke; the next section is historical V0.1 evidence.
 
 **Published snapshot · 2026-09-10:** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) was created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`. The [live demo](https://fankchen.github.io/tracecrate/) is deployed and interactively verified.
 
@@ -73,6 +73,12 @@ The workflow has only `workflow_dispatch`: no push/PR deployment and no release 
 4. The packaging script copies only the already-built static site, app license and runtime dependency licenses, then adds version/source/dirty-checkout metadata and static deployment instructions. CI refuses a dirty working tree. It creates a tarball and SHA-256 checksum; source archives are separately provided by GitHub.
 5. A separate `contents: write` job downloads the artifact, verifies its checksum and uses the built-in short-lived GitHub token to create the tag at the tested SHA and publish assets. This job does not check out or execute application source. Existing tags are rejected, never force-moved or overwritten.
 6. Record the actual release URL, tag SHA, validation run, asset names/checksums and Pages evidence in the verification record. Download and verify release assets independently. Pages remains separately dispatched; publishing a release does not deploy the site.
+
+### Recovering a failed publication
+
+A failed create-release API request can leave a draft even when the tag endpoint returns 404. Before rerunning, inspect the authenticated **release list**, drafts, tags and assets; do not interpret an absent public release as proof that nothing was created. Repeated creation can leave duplicate drafts.
+
+If validation passed, a maintainer may recover the matching draft using that exact run's original artifact: verify the draft's tag/target SHA, clean build metadata and checksum; upload missing assets without replacing any existing bytes; verify remote digests; then publish and independently download/check the public files. If state is inconsistent, stop rather than guess. Never move a published tag, overwrite an asset, weaken validation or mark the failed workflow as successful. Record the failure and recovery explicitly. Remove an abandoned draft only after confirming its identity, that it remains unpublished and that it contains no assets.
 
 Build artifacts contain synthetic examples only. Local dirty-checkout packaging is a smoke test, not release evidence. Run the packaged site through an approved static server; direct file-URL loading is not supported. No npm publish, offline installation promise or reproducible-byte-for-byte build claim is made. Preserve third-party notices when redistributing.
 

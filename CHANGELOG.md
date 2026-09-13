@@ -9,7 +9,8 @@ Published releases receive dated version headings; later documentation updates a
 - Optional structure-only timing/token metadata minimization with preview/JSON/HTML agreement and schema-1 compatibility. Missing tool durations now remain unknown.
 - Independent import cancellation, ordinal progress, per-file deadline and stale-result cleanup.
 - Structured OTLP attributes, strict integer decoding and current cache-write alias with legacy fallback.
-- 225 synthetic unit tests, 64 configured browser cases, browser-test typechecking, and manual validated-release packaging with licenses/checksums. Browser/Pages/release evidence is pending at this candidate revision.
+- 225 synthetic unit tests and all 64 browser cases pass in [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321). Added browser-test typechecking and manual validated-release packaging with licenses/checksums. Pages/release evidence is pending at this candidate revision.
+- Fixed modal first/last keyboard focus wrapping found by the new real-Chromium walkthrough; original assertions retained.
 - [Research and V0.2 design](docs/v0.2-design.md), [release notes](docs/releases/v0.2.0.md) and [keyboard walkthrough](docs/keyboard.md).
 
 ### V0.1 documentation follow-up

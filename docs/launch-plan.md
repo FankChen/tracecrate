@@ -2,6 +2,8 @@
 
 [Home](../README.md) · [Publication gates](release.md) · [Open contribution tasks](roadmap.md)
 
+**Historical V0.1 launch copy below.** It is retained as an unpublished draft, not a current V0.2 announcement. For the second iteration use [V0.2 notes](releases/v0.2.0.md) and the latest [verification record](verification.md); issue #5/#6 now have V0.2 implementations/evidence. No community post or video is automatically published by a GitHub release.
+
 **Community launch plan: posts and video are NOT published.** The [public repository](https://github.com/FankChen/tracecrate), [live demo](https://fankchen.github.io/tracecrate/), and [v0.1.0 release](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) exist. The release was created at tested commit `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715`. [CI 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) succeeded with 107 unit and 36 browser tests. [Pages 34462098830](https://github.com/FankChen/tracecrate/actions/runs/34462098830) succeeded in build, deploy, and actual public-site smoke; its downloaded [synthetic demo screenshot](screenshots/tracecrate-desktop.png) was visually reviewed. All launch copy below remains draft. See [verification](verification.md).
 
 ## Phase 0 — Earn a useful first impression

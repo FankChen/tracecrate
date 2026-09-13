@@ -7,7 +7,7 @@ The V0.2 candidate addresses the implemented items below; further proposals are 
 ## Open contribution tasks
 
 - [#4 · Versioned synthetic Claude fixture](https://github.com/FankChen/tracecrate/issues/4) — help wanted; agree on one source shape first.
-- [#5 · Keyboard-only walkthrough](https://github.com/FankChen/tracecrate/issues/5) — [documented](keyboard.md) with V0.2 browser regression; awaiting browser evidence before closure.
+- [#5 · Keyboard-only walkthrough](https://github.com/FankChen/tracecrate/issues/5) — [documented and verified](keyboard.md) with V0.2 Chromium desktop/mobile keyboard automation; release closure pending, not a manual screen-reader certification.
 - [#6 · Export metadata minimization](https://github.com/FankChen/tracecrate/issues/6) — V0.2 implementation and field contract added; awaiting release verification before closure.
 
 V0.2 also implements bounded sequence comparison, focused timeline filters, independent import cancellation/deadline, and structured OTLP/cache-write compatibility. These are not claims of persistence, full span trees, billing inference, streaming parsing or universal format support.

@@ -75,7 +75,7 @@ npm run dev
 
 `npm run check` 包括 lint、单元测试、浏览器测试类型检查及构建；`npm run test:e2e` 使用 Playwright，需要另行安装浏览器。`npm run package:release` 将已测试构建打包，附许可证与 SHA-256 校验和。
 
-**V0.2 候选 · 2026-09-13：** 本地 225 项单元测试、lint、应用／浏览器 TypeScript 检查与构建通过；核心及适配器行覆盖率 97.51%（不含 UI）。已收集 64 项浏览器用例；本次文档提交时 V0.2 浏览器、Pages 与 release 验证仍待完成。[验收记录](docs/verification.md)明确区分候选结果和以下历史结果。
+**V0.2 候选已验证 · 2026-09-13：** [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321) 在 `29bfa6ff462b112030cb1af3035d7a1002704908` 通过 **225 项单元测试、全部 64 项浏览器测试**、lint、应用／浏览器 TypeScript 检查和构建；核心及适配器行覆盖率 97.51%（不含 UI）。本次文档提交时 Pages 与 release 验证仍待完成。[验收记录](docs/verification.md)区分候选结果和以下历史结果。
 
 **已验证发布 · 2026-09-10：** [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) 已在测试提交 `52d9ae9b73f815c264a3eb39f5fc3eedc5cb9715` 上创建。[CI 34462095959](https://github.com/FankChen/tracecrate/actions/runs/34462095959) 通过 lint、TypeScript/构建、**107 项单元测试及 36 项桌面 Chromium / Pixel 7 模拟浏览器测试**。已记录核心及适配器代码行覆盖率 **96.58%（不含 UI）**。
 

@@ -2,7 +2,7 @@
 
 [Home](../README.md) · [中文](../README.zh-CN.md) · [Verification](verification.md)
 
-Use only the built-in synthetic demo. No agent installation or private file is needed. This documents the intended V0.2 interaction contract; a passing browser run must be recorded below before calling it observed behavior. Keyboard automation and axe do **not** certify screen-reader accessibility.
+Use only the built-in synthetic demo. No agent installation or private file is needed. V0.2's automated keyboard path passed in the browser run recorded below; this is not a claim that every manual assistive-technology path was exercised. Keyboard automation and axe do **not** certify screen-reader accessibility.
 
 | Step | Keys and expected focus | Purpose |
 | --- | --- | --- |
@@ -22,7 +22,8 @@ Native select keyboard conventions differ slightly by browser/OS. Use their norm
 
 - Test: [keyboard-only regression](../tests/v2.spec.ts), run by desktop Chromium and Pixel 7 emulation. The test uses Tab, arrows, Home/End, Enter, Space and Escape for the core path, checks focus trapping/return and executes axe on the dialog.
 - Filter-reset and original-event navigation are separately checked by the same suite. They supplement, not replace, keyboard assertions.
-- **Candidate status (2026-09-13):** browser run pending; local Chromium executable is unavailable. Actual CI version/OS/result will be recorded with the release evidence. The old v0.1 browser result is not a V0.2 pass.
+- **Observed automation (2026-09-13):** [CI 34747596321](https://github.com/FankChen/tracecrate/actions/runs/34747596321), candidate `29bfa6ff462b112030cb1af3035d7a1002704908`, Chromium **153.0.8010.12**, GitHub-hosted Ubuntu Linux; desktop and Pixel 7 emulation both passed the keyboard path. All 64 browser cases passed with no failed/flaky cases reported. Local Chromium is unavailable; this is remote browser evidence, not a local manual walkthrough.
+- The first candidate exposed a real Shift+Tab boundary problem in both projects. Explicit first/last modal focus wrapping fixed it; the original test assertions were retained. This result is not inferred from v0.1 tests.
 - No physical Android, Firefox/WebKit, screen-reader or manual assistive-technology certification is claimed.
 
 ## 中文简述

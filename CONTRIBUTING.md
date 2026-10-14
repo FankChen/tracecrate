@@ -14,12 +14,15 @@ npm run dev
 Before proposing a change:
 
 ```sh
+npm audit --audit-level=high
 npm run check
 npx playwright install --with-deps chromium
 npm run test:e2e
 ```
 
 `check` runs Oxlint, Vitest, browser-test TypeScript checking, then application TypeScript + Vite build. `test:coverage` produces text/HTML and machine-readable core/adapters coverage reports; no coverage percentage is promised. Playwright runs desktop Chromium and Pixel 7 emulation against the production preview server. Emulation is not physical Android testing; Firefox/WebKit coverage is not claimed. Browser installation may need network access and system-package privileges; use an approved machine/CI rather than weakening firewall or TLS protections.
+
+Dependency auditing is separate from `check` because it needs registry access. CI and the manual Pages build block known high/critical advisories in both runtime and development dependencies; the release workflow retains its stricter `npm audit` gate for all reported severities. An unavailable audit is not a pass. Prefer targeted compatible updates, inspect lockfile changes, and rerun checks rather than using `npm audit fix --force` or bypassing the gate. The audit sends dependency metadata to the npm registry, not imported traces; the browser application remains local-only.
 
 **Verification boundary:** local browser downloads are blocked by the development network, so Chromium desktop/mobile tests run in GitHub Actions. See the [verification record](docs/verification.md) for actual passing runs and limits. For each contribution report exactly which commands ran and anything blocked; do not infer passes from configuration or existing build output.
 

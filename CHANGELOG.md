@@ -4,7 +4,9 @@ Version notes are prepared during release validation; actual publication is reco
 
 ## Unreleased
 
-Publication-record documentation only; no application changes beyond V0.2.
+- Update the development-only transitive dependency `source-map-js` from 1.2.1 to 1.2.2 for [GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q) (indexed source-map denial of service). No runtime dependency or trace-schema changes.
+- Add high/critical dependency-audit gates to CI and the manual Pages build, including build/test tooling. Keep the existing release audit's all-severity gate unchanged.
+- Refresh security/contribution guidance and retain the verified V0.2 publication/recovery record. These maintenance changes are not a new release or deployment.
 
 ## [0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) — 2026-09-13
 

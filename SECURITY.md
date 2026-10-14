@@ -14,8 +14,12 @@ In the private report, include affected revision, browser/OS, impact, reproducti
 
 - Relevant issues include unintended network transmission, script/HTML injection, redaction allowlist bypass, sensitive error disclosure, resource-limit bypass, and CI/deployment trust-boundary failures.
 - Pattern matching can miss secrets by design; it must not be advertised as guaranteed safe. A failure of the strict structure-only boundary is especially important to report.
-- [v0.1.0](https://github.com/FankChen/tracecrate/releases/tag/v0.1.0) is published; no security audit is claimed. Reports should identify the affected release or default-branch revision. There is no promised support window, response SLA, or bounty program.
+- [v0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0) is published; no security audit is claimed. Reports should identify the affected release or default-branch revision. There is no promised support window, response SLA, or bounty program.
 - Fixes should receive a synthetic regression test, review, and coordinated disclosure after an appropriate fix is available. Never reproduce by importing someone else's private files.
+
+## Dependency maintenance
+
+CI and the manual Pages build audit runtime and development dependencies with `npm audit --audit-level=high` before validation/deployment. High/critical advisories and audit failures block those workflows; the release workflow separately retains `npm audit` for all reported severities. Audit results are time-specific dependency checks, not a security review or a guarantee that imported data is safe. See the [verification record](docs/verification.md) for observed results and the [contribution guide](CONTRIBUTING.md) for local checks.
 
 ## Maintainer publication prerequisites
 

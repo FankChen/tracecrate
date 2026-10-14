@@ -1,5 +1,13 @@
 # Verification record
 
+## Unreleased dependency maintenance · 2026-10-14
+
+- Baseline: clean local `8b51868`; `npm run check` passed all 225 synthetic unit tests, lint, application/browser TypeScript checks and production build on Node 24.21.0 before changes.
+- The baseline dependency audit reported one high-severity advisory, [GHSA-68fv-2mgg-jv7q](https://github.com/advisories/GHSA-68fv-2mgg-jv7q), in development-only `source-map-js` 1.2.1 (through PostCSS and Magicast). Updated only that lockfile package entry to 1.2.2 within existing dependency ranges; no direct dependencies, application code or trace schema changed.
+- A fresh `npm ci` from the updated lockfile succeeded. `npm run check` and `npm run test:coverage` each passed all **225 tests**. Machine-readable core/adapters coverage remains **97.51% lines (589/604), 95.62% statements, 91.67% branches and 100% functions**; not React UI coverage. `npm audit --audit-level=high` reported **zero known vulnerabilities**, including development dependencies, at verification time. This is not a security audit or guarantee.
+- CI and the manual Pages build now include a high/critical audit gate; the existing release workflow keeps its stricter all-severity audit. Audit needs registry access and remains separate from the local `check` script.
+- **Browser/remote validation pending:** `npm run test:e2e -- --list` discovered the existing 64 cases; this is discovery, not execution. Playwright's Chromium executable is absent locally. No browser download workaround, GitHub workflow run, release or deployment was performed for this maintenance revision; historical browser passes below do not validate it.
+
 ## v0.2.0 released · 2026-09-13
 
 - Public [release v0.2.0](https://github.com/FankChen/tracecrate/releases/tag/v0.2.0), release ID `387844870`, published at **2026-09-13 13:41:37 UTC**. The remote tag resolves to `dc5d92daabe84378d994f09637db317f36b21024`; it was not moved after publication.

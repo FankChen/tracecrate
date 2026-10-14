@@ -28,6 +28,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Audit dependencies (including build and test tooling)
+        run: npm audit --audit-level=high
       - name: Lint, unit tests, and production build
         run: npm run check
       - name: Install Chromium runtime

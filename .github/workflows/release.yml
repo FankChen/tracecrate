@@ -20,10 +20,10 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '24'
           cache: npm
@@ -44,7 +44,7 @@ jobs:
           printf '\n\n## Publication provenance\n\nValidated source commit: `%s`. [Release validation run](https://github.com/%s/actions/runs/%s). The workflow completed unit/browser tests, coverage, dependency audit, build and archive checksum verification before publication.\n' "$GITHUB_SHA" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" >> release-assets/release-notes.md
       - name: Preserve validation evidence
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-verification
           path: |
@@ -52,7 +52,7 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 14
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-assets
           path: release-assets/
@@ -66,7 +66,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: release-assets
           path: release-assets
